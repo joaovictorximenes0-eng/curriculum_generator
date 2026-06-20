@@ -3,3 +3,4 @@ resume_private/output/
 input/
 build/
 *.yaml
+*.exe
