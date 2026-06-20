@@ -59,34 +59,41 @@ def bullets_from_text(text: str):
 
 def build_competency_blocks(data):
     """
-    Estrutura simples para o visual da imagem:
-    agrupa as skills em blocos nomeados.
-    Se depois você quiser, isso pode vir pronto do YAML.
+    Lê os grupos de competências diretamente do YAML (chave `keyskills`),
+    no formato:
+        keyskills:
+          - title: Python
+            items: [Selenium, Pandas, ...]
+          - title: Web / Automação
+            items: [...]
+
+    Não há mais hardcode aqui: para adicionar, remover ou renomear um
+    grupo/skill, edite apenas o master_resume.yaml.
+
+    Mantém compatibilidade com o formato antigo (lista simples de strings)
+    agrupando tudo em um único bloco "Competências", caso alguém ainda
+    use `keyskills: [Python, Excel, ...]`.
     """
-    skills = list(data.get("keyskills", []) or [])
+    raw = data.get("keyskills", []) or []
 
-    # Fallback visual bom para o seu conjunto atual
-    groups = [
-        ("Python", ["Python", "Selenium", "PyAutoGUI", "Pandas", "Tkinter"]),
-        ("Web / Automação", ["N8N", "Arduino", "ESP32", "HTML", "CSS", "UI/UX", "JavaScript", "Linux (Básico)"]),
-        ("Pacote Adobe", ["Photoshop", "Illustrator", "InDesign"]),
-        ("Pacote Office", ["Word", "Excel", "PowerPoint", "Power BI"]),
-        ("Idiomas", ["Inglês intermediário"]),
-    ]
+    if not raw:
+        return []
 
-    # Remove itens vazios e mantém só o que existir
-    cleaned = []
-    for title, items in groups:
-        filtered = [item for item in items if item]
-        if filtered:
-            cleaned.append({"title": title, "items": filtered})
+    # Formato novo: lista de dicts {title, items}
+    if isinstance(raw[0], dict):
+        blocks = []
+        for group in raw:
+            title = group.get("title", "").strip()
+            items = [item for item in (group.get("items") or []) if item]
+            if title and items:
+                blocks.append({"title": title, "items": items})
+        return blocks
 
-    # Se quiser usar tudo o que estiver em keyskills, entra como bloco extra
-    remaining = [s for s in skills if s not in sum([g["items"] for g in cleaned], [])]
-    if remaining:
-        cleaned.append({"title": "Outros", "items": remaining})
-
-    return cleaned
+    # Formato antigo: lista simples de strings -> um único bloco
+    items = [s for s in raw if s]
+    if not items:
+        return []
+    return [{"title": "Competências", "items": items}]
 
 
 def build_body_sections(body):
@@ -120,6 +127,13 @@ def prepare_context(data):
     ctx["description_paragraphs"] = split_description(ctx.get("description", ""))
     ctx["competency_blocks"] = build_competency_blocks(ctx)
     ctx["body_sections"] = build_body_sections(ctx.get("body", {}))
+
+    # Garante que campos de contato opcionais nunca cheguem como None
+    # ao template (evita "None" literal aparecendo no HTML, já que o
+    # template não usa `is defined`/`default` nesses campos).
+    for key in ("linkedin", "github", "email", "web"):
+        if ctx.get(key) is None:
+            ctx[key] = ""
 
     return ctx
 
