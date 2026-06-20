@@ -1,5 +1,6 @@
 from pathlib import Path
 import re
+import sys
 import yaml
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
@@ -10,6 +11,7 @@ STATIC_DIR = BASE_DIR / "static"
 OUTPUT_DIR = BASE_DIR / "output"
 
 MASTER_RESUME = INPUT_DIR / "master_resume.yaml"
+SELECTION = INPUT_DIR / "selection.yaml"
 SECRETS = INPUT_DIR / "secrets.yaml"
 OUTPUT_HTML = OUTPUT_DIR / "resume.html"
 TEMPLATE_NAME = "template.html"
@@ -57,18 +59,166 @@ def bullets_from_text(text: str):
     return items
 
 
+# =============================================================================
+# CAMADA DE SELEÇÃO (banco de dados -> currículo filtrado)
+# =============================================================================
+# Estas funções pegam o "banco" completo (skills_bank, experience_bank,
+# education_bank, description_bank) e o arquivo selection.yaml, e devolvem
+# exatamente a mesma estrutura `keyskills` / `body` que o código antigo
+# já sabia consumir — então o resto do pipeline (build_competency_blocks,
+# build_body_sections, etc.) não precisa mudar nada.
+# =============================================================================
+
+def index_by_id(items):
+    """Transforma uma lista de dicts com `id` num dicionário id -> item."""
+    return {item["id"]: item for item in (items or []) if item.get("id")}
+
+
+def warn_missing(kind, item_id):
+    print(f"[selection] aviso: {kind} com id '{item_id}' não encontrado no master_resume.yaml — ignorado.", file=sys.stderr)
+
+
+def resolve_description(master, selection):
+    bank = index_by_id(master.get("description_bank"))
+    desc_id = selection.get("description_id")
+
+    if desc_id and desc_id in bank:
+        return bank[desc_id].get("text", "")
+
+    if desc_id:
+        warn_missing("description", desc_id)
+
+    # Fallback: primeira descrição do banco, se existir.
+    if bank:
+        return next(iter(bank.values())).get("text", "")
+    return ""
+
+
+def resolve_skills(master, selection):
+    """
+    Devolve no formato `keyskills` (lista de grupos {title, items}) que
+    build_competency_blocks já consome, mas só com as skills selecionadas,
+    agrupadas na ordem em que cada grupo aparece pela primeira vez na
+    seleção.
+    """
+    bank = index_by_id(master.get("skills_bank"))
+    selected_ids = selection.get("skills") or []
+
+    groups_order = []
+    groups = {}
+
+    for skill_id in selected_ids:
+        skill = bank.get(skill_id)
+        if not skill:
+            warn_missing("skill", skill_id)
+            continue
+        group_title = skill.get("group", "Outros")
+        if group_title not in groups:
+            groups[group_title] = []
+            groups_order.append(group_title)
+        groups[group_title].append(skill.get("name", ""))
+
+    return [{"title": title, "items": groups[title]} for title in groups_order]
+
+
+def resolve_experiences(master, selection):
+    """
+    Devolve a lista de entries no formato que build_body_sections espera
+    dentro de body['Experience']: cada item com title/company/start/end/
+    description (texto com bullets unidos por linha, no formato "- texto"
+    para reaproveitar bullets_from_text).
+    """
+    bank = index_by_id(master.get("experience_bank"))
+    selected = selection.get("experiences") or []
+
+    entries = []
+    for item in selected:
+        exp_id = item.get("id") if isinstance(item, dict) else item
+        exp = bank.get(exp_id)
+        if not exp:
+            warn_missing("experience", exp_id)
+            continue
+
+        bullets_bank = {b["id"]: b for b in (exp.get("bullets") or []) if b.get("id")}
+        wanted = item.get("bullets") if isinstance(item, dict) else "all"
+
+        if wanted == "all" or wanted is None:
+            chosen_bullets = [b.get("text", "") for b in (exp.get("bullets") or [])]
+        else:
+            chosen_bullets = []
+            for bullet_id in wanted:
+                bullet = bullets_bank.get(bullet_id)
+                if not bullet:
+                    warn_missing(f"bullet (em {exp_id})", bullet_id)
+                    continue
+                chosen_bullets.append(bullet.get("text", ""))
+
+        description_text = "\n".join(f"- {t}" for t in chosen_bullets if t)
+
+        entries.append({
+            "start": exp.get("start", ""),
+            "end": exp.get("end", ""),
+            "title": exp.get("title", ""),
+            "company": exp.get("company", ""),
+            "description": description_text,
+        })
+
+    return entries
+
+
+def resolve_education(master, selection):
+    bank = index_by_id(master.get("education_bank"))
+    selected_ids = selection.get("education") or []
+
+    entries = []
+    for edu_id in selected_ids:
+        edu = bank.get(edu_id)
+        if not edu:
+            warn_missing("education", edu_id)
+            continue
+        entries.append({
+            "start": edu.get("start", ""),
+            "end": edu.get("end", ""),
+            "title": edu.get("title", ""),
+            "company": edu.get("company", ""),
+            "description": edu.get("description", ""),
+        })
+
+    return entries
+
+
+def apply_selection(master, selection):
+    """
+    Recebe o banco completo (master_resume.yaml) e a seleção (selection.yaml)
+    já resolvidos (placeholders aplicados), e devolve um dict no MESMO
+    formato que o pipeline antigo usava (description, keyskills, body),
+    para que build_competency_blocks/build_body_sections funcionem sem
+    alteração.
+    """
+    resolved = dict(master)
+
+    resolved["description"] = resolve_description(master, selection)
+    resolved["keyskills"] = resolve_skills(master, selection)
+    resolved["body"] = {
+        "Experience": resolve_experiences(master, selection),
+        "Education": resolve_education(master, selection),
+    }
+
+    # Os bancos não são mais necessários no contexto final do template.
+    for key in ("description_bank", "skills_bank", "experience_bank", "education_bank"):
+        resolved.pop(key, None)
+
+    return resolved
+
+
+# =============================================================================
+# PIPELINE PRÉ-EXISTENTE (sem alterações de comportamento)
+# =============================================================================
+
 def build_competency_blocks(data):
     """
-    Lê os grupos de competências diretamente do YAML (chave `keyskills`),
-    no formato:
-        keyskills:
-          - title: Python
-            items: [Selenium, Pandas, ...]
-          - title: Web / Automação
-            items: [...]
-
-    Não há hardcode aqui: para adicionar, remover ou renomear um
-    grupo/skill, edite apenas o master_resume.yaml.
+    Lê os grupos de competências já filtrados pela seleção (chave
+    `keyskills`, no formato lista de {title, items}).
     """
     raw = data.get("keyskills", []) or []
     blocks = []
@@ -83,8 +233,7 @@ def build_competency_blocks(data):
 
 
 # Ícones SVG monocromáticos (herdam a cor do texto via fill="currentColor"),
-# estilo outline simples, viewBox 24x24 — fáceis de colorir em branco no CSS
-# (.contact-icon { color: #fff; }) sem precisar trocar o markup.
+# estilo outline simples, viewBox 24x24.
 CONTACT_ICONS = {
     "address": '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-7.2-7-12a7 7 0 1 1 14 0c0 4.8-7 12-7 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>',
     "phone": '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.6 10.8c1.3 2.6 3.4 4.7 6 6l2-2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.9c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2 2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
@@ -100,9 +249,7 @@ def build_contacts(ctx):
     com {key, icon (svg), text, href (opcional)}.
 
     Apenas LinkedIn e GitHub viram hyperlink, e a URL é sempre exibida por
-    extenso (nunca abreviada) para evitar ambiguidade no link. Os demais
-    (endereço, telefone, email) mostram só ícone + texto, sem link.
-
+    extenso (nunca abreviada). Os demais mostram só ícone + texto.
     Itens sem valor no YAML são omitidos automaticamente.
     """
     contacts = []
@@ -125,7 +272,6 @@ def build_contacts(ctx):
 
     linkedin = ctx.get("linkedin")
     if linkedin:
-        # Aceita tanto "in/usuario" quanto a URL completa já pronta no YAML.
         href = linkedin if linkedin.startswith("http") else f"https://www.linkedin.com/{linkedin.lstrip('/')}"
         contacts.append({"key": "linkedin", "icon": CONTACT_ICONS["linkedin"], "text": href, "href": href})
 
@@ -174,10 +320,15 @@ def prepare_context(data):
 
 
 def main():
-    master = load_yaml(MASTER_RESUME)
+    master_raw = load_yaml(MASTER_RESUME)
+    selection_raw = load_yaml(SELECTION)
     secrets = load_yaml(SECRETS)
-    resolved = resolve_placeholders(master, secrets)
-    context = prepare_context(resolved)
+
+    master = resolve_placeholders(master_raw, secrets)
+    selection = resolve_placeholders(selection_raw, secrets)
+
+    filtered = apply_selection(master, selection)
+    context = prepare_context(filtered)
 
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATES_DIR)),
