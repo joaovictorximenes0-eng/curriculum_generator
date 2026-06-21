@@ -137,6 +137,31 @@ def resolve_education(master, selection):
     return entries
 
 
+def resolve_extra_education(master, selection):
+    """
+    Devolve a lista de formações complementares (cursos rápidos, palestras,
+    workshops) filtradas pela seleção, na ordem de
+    selection["extra_education"]. Cada item já vem pronto no formato
+    {title, institution, year} usado diretamente pelo template.
+    """
+    bank = index_by_id(master.get("extra_education_bank"))
+    selected_ids = selection.get("extra_education") or []
+
+    entries = []
+    for item_id in selected_ids:
+        item = bank.get(item_id)
+        if not item:
+            warn_missing("extra_education", item_id)
+            continue
+        entries.append({
+            "title": item.get("title", ""),
+            "institution": item.get("institution", ""),
+            "year": item.get("year", ""),
+        })
+
+    return entries
+
+
 def apply_selection(master, selection):
     """
     Ponto de entrada do módulo: recebe o banco completo e a seleção (ambos
@@ -152,9 +177,10 @@ def apply_selection(master, selection):
         "Experience": resolve_experiences(master, selection),
         "Education": resolve_education(master, selection),
     }
+    resolved["extra_education"] = resolve_extra_education(master, selection)
 
     # Os bancos não são mais necessários no contexto final do template.
-    for key in ("description_bank", "skills_bank", "experience_bank", "education_bank"):
+    for key in ("description_bank", "skills_bank", "experience_bank", "education_bank", "extra_education_bank"):
         resolved.pop(key, None)
 
     return resolved

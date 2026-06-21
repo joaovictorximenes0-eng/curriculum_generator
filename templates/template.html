@@ -44,24 +44,7 @@ href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;
     </section>
 
     <main class="layout">
-      <section class="left-column">
-        <h2>Competências Técnicas</h2>
-
-        <div class="competency-grid">
-          {% for group in competency_blocks %}
-          <div class="competency-block">
-            <h3>{{ group.title }}</h3>
-            <ul>
-             {% for item in group["items"] %}
-              <li>{{ item }}</li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% endfor %}
-        </div>
-      </section>
-
-      <section class="right-column">
+      <section class="experience-column">
         <h2>Experiências</h2>
 
         {% for section in body_sections %}
@@ -136,6 +119,36 @@ href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;
             {% endfor %}
           {% endif %}
         {% endfor %}
+
+        {% if extra_education and extra_education|length > 0 %}
+        <div class="extra-education">
+          <div class="extra-education-label">Cursos &amp; Aperfeiçoamentos</div>
+          <div class="extra-education-tags">
+            {% for item in extra_education %}
+            <span class="extra-education-tag">
+              {{ item.title }}{% if item.institution %} — {{ item.institution }}{% endif %}{% if item.year %}, {{ item.year }}{% endif %}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </section>
+
+      <section class="competency-column">
+        <h2>Competências Técnicas</h2>
+
+        <div class="competency-list">
+          {% for group in competency_blocks %}
+          <div class="competency-block">
+            <h3>{{ group.title }}</h3>
+            <ul>
+             {% for item in group["items"] %}
+              <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+        </div>
       </section>
     </main>
   </div>
