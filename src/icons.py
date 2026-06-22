@@ -12,6 +12,7 @@ WhatsApp), basta adicionar uma entrada nova em CONTACT_TYPES — nenhum
 outro módulo precisa mudar.
 """
 from urllib.parse import quote
+from urllib.parse import urlencode, quote
 
 # Ícones SVG simples, estilo outline, viewBox 24x24.
 _ICON_ADDRESS = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 21s-7-7.2-7-12a7 7 0 1 1 14 0c0 4.8-7 12-7 12Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>'
@@ -28,16 +29,28 @@ def _no_link(value: str, ctx: dict):
 
 def _email_href(value: str, ctx: dict):
     """
-    Monta um link mailto: com assunto pré-preenchido (ex: "Contato via
-    Currículo — João Victor"), para reduzir a fricção de quem quiser
-    escrever: o cliente de email já abre pronto para enviar.
+    Abre a janela de composição do Gmail com destinatário, assunto e corpo
+    pré-preenchidos.
     """
     full_name = (ctx.get("full_name") or "").strip()
+
     subject = "Contato via Currículo"
     if full_name:
         subject = f"{subject} — {full_name}"
-    return f"mailto:{value}?subject={quote(subject)}"
 
+    body = "Olá,\n\nEscrevo após ver seu currículo e gostaria de entrar em contato."
+    if full_name:
+        body = f"Olá, {full_name}\n\nEscrevo após ver seu currículo e gostaria de entrar em contato."
+
+    params = {
+        "view": "cm",
+        "fs": "1",
+        "to": value,
+        "su": subject,
+        "body": body,
+    }
+
+    return "https://mail.google.com/mail/?" + urlencode(params, quote_via=quote)
 
 def _linkedin_href(value: str, ctx: dict):
     """Aceita tanto 'in/usuario' quanto a URL completa já pronta no YAML."""
