@@ -1,0 +1,45 @@
+/*
+ * variables.css — Custom properties globais
+ *
+ * Todas as cores, densidades e tokens de design ficam aqui.
+ * Para mudar a paleta do currículo, edite só este arquivo.
+ */
+
+:root {
+  /* Densidade de espaçamento — injetadas inline em .page pelo render.py.
+     Os fallbacks aqui garantem que o CSS funcione sem o Python também
+     (ex: ao abrir o HTML manualmente sem rodar render.py). */
+  --density-experience: 1;
+  --density-side: 1;
+
+  /* Fundo e texto geral */
+  --color-bg-main: #f2f2f2;
+  --color-bg-page: #fff;
+  --color-text-main: #151515;
+  --color-text-muted: #444;
+  --color-text-light: #888;
+
+  /* Header escuro (topbar) */
+  --color-topbar-bg: #1f192b;
+  --color-topbar-text: #fff;
+  --color-topbar-headline: rgba(255, 255, 255, 0.82);
+  --color-topbar-border: rgba(255, 255, 255, 0.9);
+
+  /* Botões de ação dentro do topbar (copiar email, etc.) */
+  --color-btn-text-dim: rgba(255, 255, 255, 0.65);
+  --color-btn-border-dim: rgba(255, 255, 255, 1);
+  --color-btn-border-hover: rgba(255, 255, 255, 0.7);
+  --color-btn-feedback: rgba(255, 255, 255, 0.75);
+
+  /* Bordas e separadores */
+  --color-border-headline: rgb(113, 113, 113);
+  --color-border-primary: #1f192b;
+  --color-border-secondary: #d0d0d0;
+  --color-border-column: #d8d8d8;
+  --color-border-sep: #aaa;
+
+  /* Tags de cursos e aperfeiçoamentos */
+  --color-tag-bg: #f2f2f2;
+  --color-tag-border: #e0e0e0;
+  --color-tag-text: #3a3a3a;
+}

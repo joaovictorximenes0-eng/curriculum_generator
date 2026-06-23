@@ -1,0 +1,56 @@
+/*
+ * experience.css — Cards de experiência profissional
+ *
+ * Cada experiência (article.entry) tem: título + empresa, data e lista
+ * de bullets descritivos. Espaçamento responsivo via --density-experience.
+ */
+
+.entry {
+  margin-bottom: calc(18px * var(--density-experience));
+}
+
+.entry-header {
+  display: block;
+  gap: 12px;
+  font-size: 11pt;
+}
+
+.entry-header h3 {
+  margin: 0;
+  font-size: 11.5pt;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.entry-date {
+  white-space: nowrap;
+  font-size: 10pt;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.entry-description {
+  text-align: justify;
+  line-height: calc(1.28 * var(--density-experience));
+  margin: calc(10px * var(--density-experience)) 0 0 0;
+  font-size: 9.4pt;
+  list-style: none;
+  padding-left: 0;
+}
+
+.entry-description li {
+  position: relative;
+  padding-left: 12px;
+  margin-bottom: calc(4px * var(--density-experience));
+}
+
+.entry-description li:last-child {
+  margin-bottom: 0;
+}
+
+/* Marcador "–" à esquerda de cada bullet */
+.entry-description li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+}

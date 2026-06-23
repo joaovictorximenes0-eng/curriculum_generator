@@ -1,0 +1,167 @@
+/*
+ * topbar.css — Header escuro (nome, subtítulo, contatos)
+ *
+ * Cobre o faixa superior do currículo: nome em caixa alta, subtítulo de
+ * profissão, lista de contatos com ícones, e os controles interativos
+ * (botão copiar email, fallback de mailto:).
+ */
+
+/* --- Estrutura geral --- */
+
+.topbar {
+  display: grid;
+  grid-template-columns: 1.2fr 0.75fr;
+  gap: 18px;
+  background: var(--color-topbar-bg);
+  color: var(--color-topbar-text);
+  padding: 24px 18px 16px 18px;
+  align-items: start;
+}
+
+.topbar-left {
+  padding-right: 24px;
+}
+
+.topbar-left h1 {
+  margin: 0;
+  font-size: 29pt;
+  line-height: 0.92;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  max-width: 320px;
+  white-space: normal;
+}
+
+/* Subtítulo abaixo do nome (ex: "Desenvolvedor Full-Stack") */
+.headline-title {
+  margin-top: 8px;
+  font-size: 11pt;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-topbar-headline);
+  text-transform: uppercase;
+}
+
+.topbar-right {
+  padding-top: 20px;
+  border-left: 3px solid var(--color-topbar-border);
+  padding-left: 16px;
+  font-size: 8pt;
+  line-height: 1.35;
+}
+
+/* --- Linhas de contato --- */
+
+.contact-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+  word-break: break-word;
+  flex-wrap: wrap;
+}
+
+.contact-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  color: var(--color-topbar-text);
+}
+
+.contact-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Links de contato (LinkedIn, GitHub, Email) */
+.contact-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--color-topbar-text);
+  text-decoration: none;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+}
+
+.contact-text {
+  min-width: 0;
+}
+
+/* CTA inline no link (ex: "↗ abrir") */
+.contact-cta {
+  font-size: 7.6pt;
+  color: var(--color-btn-feedback);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.contact-link:hover .contact-cta {
+  color: var(--color-topbar-text);
+}
+
+/* Texto simples sem link */
+.contact-line a {
+  color: var(--color-topbar-text);
+  text-decoration: none;
+}
+
+.contact-line a:hover {
+  text-decoration: underline;
+}
+
+/* --- Fallback de email (aparece se o mailto: não abrir nada) --- */
+
+.email-fallback {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.email-fallback--visible {
+  display: inline-flex;
+}
+
+.email-fallback-msg {
+  font-size: 7.5pt;
+  color: var(--color-btn-feedback);
+  font-style: italic;
+}
+
+/* --- Botões de ação (copiar email, copiar telefone) --- */
+
+.copy-email-btn,
+.copy-phone-btn {
+  font-family: inherit;
+  font-size: 7.5pt;
+  color: var(--color-btn-text-dim);
+  background: transparent;
+  border: 1px solid var(--color-btn-border-dim);
+  border-radius: 9px;
+  padding: 1px 7px;
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.copy-email-btn:hover,
+.copy-phone-btn:hover {
+  color: var(--color-topbar-text);
+  border-color: var(--color-btn-border-hover);
+}
+
+.copy-email-feedback,
+.copy-phone-feedback {
+  font-size: 7.5pt;
+  color: var(--color-btn-feedback);
+  font-style: italic;
+}

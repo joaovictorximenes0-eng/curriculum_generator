@@ -1,0 +1,34 @@
+/*
+ * base.css — Reset e estrutura raiz
+ *
+ * Box model, fontes de base e a folha A4 (.page).
+ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg-main);
+  font-family: 'Poppins', Helvetica, sans-serif;
+  color: var(--color-text-main);
+}
+
+body {
+  padding: 18px;
+}
+
+/* Folha A4 exata. overflow:hidden trava o conteúdo dentro da página —
+   se o conteúdo estourar, o page_check.py vai avisar no terminal. */
+.page {
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto;
+  background: var(--color-bg-page);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}

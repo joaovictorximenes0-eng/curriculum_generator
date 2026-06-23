@@ -1,0 +1,40 @@
+/*
+ * competency.css — Competências técnicas (coluna direita)
+ *
+ * Grupos de skills com título em negrito e itens em lista com marcador "–".
+ * Espaçamento responsivo via --density-side.
+ */
+
+.competency-list {
+  display: flex;
+  flex-direction: column;
+  gap: calc(16px * var(--density-side));
+}
+
+.competency-block h3 {
+  margin: 0 0 6px 0;
+  font-size: 12pt;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.competency-block ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.competency-block li {
+  font-size: 10pt;
+  line-height: 1.35;
+  margin: 0 0 calc(3px * var(--density-side)) 0;
+  position: relative;
+  padding-left: 12px;
+}
+
+.competency-block li::before {
+  content: "–";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
