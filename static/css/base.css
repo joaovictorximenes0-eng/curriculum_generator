@@ -1,37 +1,83 @@
 /*
- * base.css — Reset e estrutura raiz
- *
- * Box model, fontes de base e a folha A4 (.page).
+ * base.css — Reset e estrutura raiz (Corrigido)
  */
 
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
+/* 1. Global: Comportamento para a TELA (Navegador) */
 html, body {
   margin: 0;
   padding: 0;
   background: var(--color-bg-main);
   font-family: 'Poppins', Helvetica, sans-serif;
   color: var(--color-text-main);
-  width: 210mm;
-  height: 297mm;
-  overflow: hidden;
+  /* Sem tamanhos fixos aqui para permitir o scroll natural do navegador */
 }
 
 body {
-  padding: 18px;
+  padding: 24px 18px; /* Dá um respiro nas bordas da tela ao visualizar o HTML */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
-/* Folha A4 exata. overflow:hidden trava o conteúdo dentro da página —
-   se o conteúdo estourar, o page_check.py vai avisar no terminal. */
+/* 2. A Folha A4 no Navegador */
 .page {
   width: 210mm;
   height: 297mm;
   margin: 0 auto;
   background: var(--color-bg-page);
-  overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
+  
+  /* O overflow hidden aqui garante que o conteúdo que passar do limite 
+     seja cortado, acionando o seu script 'page_check.py' com precisão */
+  overflow: hidden; 
+
+  /* Opcional para a tela: uma sombra leve para parecer um papel de verdade */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+}
+
+/* Indicador visual de estouro na tela */
+.page::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: transparent;
+}
+
+/* 3. Configurações exclusivas para a IMPRESSÃO (Geração do PDF) */
+@media print {
+  html, body {
+    width: 210mm;
+    height: 297mm;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    background: #ffffff;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  .page {
+    margin: 0;
+    border: none;
+    box-shadow: none; /* Remove a sombra na hora de imprimir */
+    width: 210mm;
+    height: 297mm;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
 }
