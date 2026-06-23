@@ -37,6 +37,7 @@ body {
   /* O overflow hidden aqui garante que o conteúdo que passar do limite 
      seja cortado, acionando o seu script 'page_check.py' com precisão */
   overflow: hidden; 
+  
 
   /* Opcional para a tela: uma sombra leve para parecer um papel de verdade */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 

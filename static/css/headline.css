@@ -6,13 +6,15 @@
  */
 
 .headline {
-  padding: 14px 18px 12px 18px;
+  padding: 20px 18px 20px 18px;
   border-bottom: 1px solid var(--color-border-headline);
+  margin-left:10px;
+  margin-right:10px;
 }
 
 .headline p {
   margin: 0;
-  font-size: 12pt;
+  font-size: 11pt;
   line-height: 1.4;
   font-weight: 700;
   text-align: justify;

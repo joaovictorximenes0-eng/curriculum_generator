@@ -42,4 +42,10 @@
   --color-tag-bg: #f2f2f2;
   --color-tag-border: #e0e0e0;
   --color-tag-text: #3a3a3a;
+
+
+  /*Borda página*/
+
+  --border-page:10px;
+
 }

@@ -12,7 +12,7 @@
   display: grid;
   grid-template-columns: 1.9fr 1fr;
   gap: 24px;
-  padding: 12px 18px 18px 18px;
+  padding: 20px 18px 18px 18px;
 }
 
 .experience-column {
@@ -23,6 +23,7 @@
   min-width: 0;
   padding-left: 15px;
   border-left: 1px solid var(--color-border-column);
+  margin-top:0px;
 }
 
 /* --- Títulos de seção --- */

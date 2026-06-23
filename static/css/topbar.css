@@ -15,11 +15,13 @@
   background: var(--color-topbar-bg);
   color: var(--color-topbar-text);
   padding: 24px 18px 16px 18px;
-  align-items: start;
+  align-items: center;
+
 }
 
 .topbar-left {
   padding-right: 24px;
+  padding-left:var(--border-page);
 }
 
 .topbar-left h1 {
@@ -31,6 +33,7 @@
   text-transform: uppercase;
   max-width: 320px;
   white-space: normal;
+  align-items: center;
 }
 
 /* Subtítulo abaixo do nome (ex: "Desenvolvedor Full-Stack") */
