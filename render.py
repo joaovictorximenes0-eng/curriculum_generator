@@ -1,17 +1,7 @@
 """
-Ponto de entrada: lê os YAMLs de entrada, aplica a seleção, monta o
+Ponto de entrada: lê o master_resume, lê os requisitos da vaga em vaga.txt,
+aplica o motor de pontuação inteligente por Tiers/Keywords, monta o
 contexto e renderiza o template HTML final.
-
-Toda a lógica fica modularizada em src/ — este arquivo só orquestra a
-ordem das chamadas. Veja:
-    src/yaml_io.py    -> carregar YAML e resolver ${PLACEHOLDERS}
-    src/selection.py  -> filtrar o banco (master_resume.yaml) pela seleção
-    src/context.py    -> montar o contexto final para o template
-    src/contacts.py   -> lista de contatos (usa src/icons.py)
-    src/icons.py      -> registro de ícones SVG por tipo de contato
-    src/text_utils.py -> utilitários de texto (parágrafos/bullets)
-    src/page_check.py -> estimativa de overflow de página A4
-    src/pdf_export.py -> exportação do HTML final para PDF (via Playwright)
 """
 import sys
 from pathlib import Path
@@ -33,7 +23,7 @@ from page_check import check_overflow, print_overflow_warning, compute_density  
 from pdf_export import export_pdf  # noqa: E402
 
 MASTER_RESUME = INPUT_DIR / "master_resume.yaml"
-SELECTION = INPUT_DIR / "selection.yaml"
+VAGA_TXT = INPUT_DIR / "vaga.txt"  # O substituto inteligente do selection.yaml
 SECRETS = INPUT_DIR / "secrets.yaml"
 OUTPUT_HTML = OUTPUT_DIR / "resume.html"
 OUTPUT_PDF = OUTPUT_DIR / "resume.pdf"
@@ -42,13 +32,20 @@ TEMPLATE_NAME = "template.html"
 
 def main():
     master_raw = load_yaml(MASTER_RESUME)
-    selection_raw = load_yaml(SELECTION)
     secrets = load_yaml(SECRETS)
 
     master = resolve_placeholders(master_raw, secrets)
-    selection = resolve_placeholders(selection_raw, secrets)
 
-    filtered = apply_selection(master, selection)
+    # Lê a vaga de forma segura. Se o arquivo não existir, o motor usa os pesos padrão
+    vaga_text = ""
+    if VAGA_TXT.exists():
+        vaga_text = VAGA_TXT.read_text(encoding="utf-8")
+        print(f"[render] Lendo requisitos e palavras-chave de: {VAGA_TXT}")
+    else:
+        print("[render] Aviso: vaga.txt não encontrado. Gerando versão genérica por Tiers de peso.")
+
+    # A mágica acontece aqui: passamos o texto da vaga no lugar do antigo dicionário de seleção
+    filtered = apply_selection(master, vaga_text)
     context = prepare_context(filtered)
 
     estimated_mm, usable_mm, overflow = check_overflow(

@@ -1,0 +1,39 @@
+# 🚀 Smart Resume Generator (AI-Driven ATS Optimizer)
+
+Este é um ecossistema automatizado para geração e otimização de currículos baseado em dados. O projeto evoluiu de um gerador estático para um **motor de triagem analítico orientado a requisitos (Data-Driven)**. 
+
+Em vez de gerenciar manualmente quais experiências e competências entram no currículo, o pipeline analisa o texto bruto de uma vaga de emprego (`vaga.txt`), calcula o nível de relevância técnica dos seus projetos utilizando um sistema de **Scoring & Tiers de Peso**, e renderiza um PDF A4 perfeito, totalmente personalizado para a oportunidade em segundos.
+
+---
+
+## 🧠 Como o Motor Funciona
+
+O projeto resolve o problema do limite físico do papel (A4) e dos filtros automatizados de recrutamento (ATS):
+
+1. **Leitura de Contexto (`vaga.txt`):** O script lê os requisitos, responsabilidades e descrição de uma vaga real colada no arquivo.
+2. **Algoritmo de Scoring:** O sistema varre o banco completo (`master_resume.yaml`) buscando correspondências entre o texto da vaga, os nomes das tecnologias e as `tags` associadas.
+3. **Hierarquia Quântica de Pesos (Tiers):** Caso o espaço em papel permita ou haja empate, o código prioriza habilidades de maior impacto de engenharia (ex: *Java 17, Python, Docker*) em detrimento de ferramentas utilitárias comuns (*Microsoft Word, PowerPoint*).
+4. **Corte Rígido (O Número Mágico):** Para garantir que o currículo nunca extrapole **uma página A4**, o script ordena as experiências pelo score e renderiza apenas o "Top 3" projetos mais compatíveis, limitando também o teto de competências técnicas.
+
+---
+
+## 📁 Estrutura do Projeto
+
+```text
+├── input
+│   ├── master_resume.yaml   # O Banco de Dados completo de toda sua carreira (com tags)
+│   ├── secrets.yaml         # Dados sensíveis mascarados (ex: telefone, e-mail)
+│   └── vaga.txt             # Onde você cola a descrição da vaga desejada 👈 (Novo!)
+├── output
+│   ├── resume.html          # O currículo gerado em HTML estruturado
+│   └── resume.pdf           # O produto final: PDF pronto para envio
+├── src                      # Módulos core do sistema
+│   ├── selection.py         # O Cérebro: Algoritmo de Scoring, Tiers e Travas de Escopo
+│   ├── context.py           # Preparação e normalização de dados para o Jinja2
+│   ├── page_check.py        # Validador de densidade visual e overflow do A4
+│   └── pdf_export.py        # Exportação HTML -> PDF ultra-fiel via Playwright
+├── static                   # Estilização modular (CSS)
+│   └── css/                 # Base, Layout, Experiências, Impressão, etc.
+├── templates
+│   └── template.html        # Template base escrito em Jinja2 HTML
+└── render.py                # O Maestro: Orquestrador que você roda no terminal
