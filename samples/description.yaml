@@ -1,0 +1,31 @@
+# =============================================================================
+# description.yaml — Metadados e banco de descrições/headlines
+# =============================================================================
+# Informações de identidade do currículo (nome, contato, subtítulo) e as
+# versões de texto descritivo para cada perfil de vaga.
+# =============================================================================
+
+template: resume_no_bars
+config: {}
+
+full_name: ${RESUME_NAME}
+
+# Subtítulo exibido abaixo do nome, dentro da faixa escura do header.
+# Deixe em branco ("") para omitir.
+headline_title: Desenvolvedor Full-Stack e Engenheiro de Dados
+
+address:
+  - ${RESUME_ADDRESS}
+
+phone: ${RESUME_PHONE}
+linkedin: ${RESUME_LINKEDIN}
+github: ${RESUME_GITHUB}
+email: ${RESUME_EMAIL}
+
+# Cada entrada tem um `id` que é referenciado em selection.yaml via
+# `description_id`. O tom muda dependendo da vaga (técnico vs. design).
+description_bank:
+  - id: desc_geral
+    text: >
+      Sua descrição
+

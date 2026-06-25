@@ -1,0 +1,34 @@
+# =============================================================================
+# education.yaml — Formações acadêmicas e complementares
+# =============================================================================
+# Duas seções:
+#   education_bank      → formações principais (graduação, técnico)
+#   extra_education_bank → cursos rápidos, palestras, workshops
+#
+# Para usar em selection.yaml:
+#   education:       [id1, id2]   → formações principais (linha única)
+#   extra_education: [id1, id2]   → cursos exibidos como tags compactas
+# =============================================================================
+
+# --- Formações principais ---
+education_bank:
+
+  - id: edu_faculdade
+    start: 2024
+    end: Previsão 2027
+    title: Bacharelado em Curso Superior
+    company: faculdade
+    description: ""
+    tags: [tag1, tag2]
+
+
+# --- Cursos e aperfeiçoamentos ---
+# Aparecem como tags compactas abaixo das formações principais.
+# Campos: id, title, institution (opcional), year (opcional), tags.
+extra_education_bank:
+
+  - id: id_course
+    title: "Semana de Estudos com Empresa"
+    institution: Local
+    year: 2026
+    tags: [tag1, tag2]

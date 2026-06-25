@@ -2,7 +2,6 @@ output/
 resume_private/output/
 input/
 build/
-secrets.yaml
 *.exe
 *.pyc
 *.pdf

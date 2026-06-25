@@ -1,0 +1,29 @@
+# =============================================================================
+# experience.yaml — Banco de experiências profissionais e projetos
+# =============================================================================
+# Cada experiência tem: id, datas (start/end), título, empresa, tags e uma
+# lista de bullets — cada bullet com seu próprio id e tags.
+#
+# Granularidade de seleção (em selection.yaml):
+#   bullets: all          → todos os bullets da experiência
+#   bullets: [id1, id2]   → só os bullets listados, nessa ordem
+#
+# Para adicionar uma experiência nova: crie uma entrada com id único.
+# Para usá-la: adicione o id em selection.yaml > experiences.
+# =============================================================================
+
+experience_bank:
+
+  - id: exp_competitech
+    start: Julho de 2025
+    end: Atual
+    title: Desenvolvedor
+    company: Projeto de Extensão 
+    tags: [tag1,tag2]
+    bullets:
+      - id: bullet1
+        text: Primeiro texto sobre o projeto
+        tags: [tag1, tag2, tah3]
+      - id: bullet2
+        text: Segundo texto sobre o projeto
+        tags: [tag1, tag2, tah3]

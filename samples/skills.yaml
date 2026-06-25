@@ -1,0 +1,26 @@
+# =============================================================================
+# skills.yaml — Banco completo de skills técnicas
+# =============================================================================
+# Cada skill tem: id único, group (título do bloco no currículo), name
+# (texto exibido) e tags (palavras-chave para seleção manual ou futura
+# seleção automática por matching de vagas).
+#
+# Para adicionar uma skill nova: crie uma entrada com um id novo.
+# Para usá-la num currículo: adicione o id em selection.yaml > skills.
+# =============================================================================
+
+# input/competence.yaml
+
+# Agora a sua hierarquia estratégica fica guardada aqui, no topo dos seus dados!
+tier_config:
+  tier_1: [java, python, mysql, pandas, powerbi, sql, backend, dados, bi]
+  tier_2: [docker, git, github, linux, n8n, arduino, esp32, html, css, javascript, js, selenium, pyautogui]
+  tier_3: [photoshop, illustrator, indesign, design, ui/ux]
+  tier_4: [word, powerpoint, office]
+
+always_include_groups: ["Idiomas"]
+
+skills_bank:
+  - name: "Habilidade"
+    group: "Área dessa aptidão"
+    tags: [tag1,tag2]
