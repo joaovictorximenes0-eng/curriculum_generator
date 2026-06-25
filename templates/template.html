@@ -6,11 +6,9 @@
   <title>{{ full_name }}</title>
   <link rel="stylesheet" href="../static/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<script src="static/script.js"></script>   
-<link
-rel="stylesheet"
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="static/script.js"></script>   
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap">
 </head>
 <body>
   <div class="page" style="--density-experience: {{ density.experience if density else 1.0 }}; --density-side: {{ density.side if density else 1.0 }};">
@@ -23,35 +21,35 @@ href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;
       </div>
 
       <div class="topbar-right">
-  {% for c in contacts %}
-    <div class="contact-line contact-line-{{ c.key }}">
-      <span class="contact-icon">{{ c.icon | safe }}</span>
+        {% for c in contacts %}
+        <div class="contact-line contact-line-{{ c.key }}">
+          <span class="contact-icon">{{ c.icon | safe }}</span>
 
-      {% if c.href %}
-      <a href="{{ c.href }}" target="_blank" rel="noopener" class="contact-link">
-        <span class="contact-text">{{ c.text }}</span>
+          {% if c.href %}
+          <a href="{{ c.href }}" target="_blank" rel="noopener" class="contact-link">
+            <span class="contact-text">{{ c.text }}</span>
 
-        {% if c.cta %}
-        <span class="contact-cta">{{ c.cta }}</span>
-        {% endif %}
-      </a>
-      {% else %}
-      <span class="contact-text">{{ c.text }}</span>
-      {% endif %}
+            {% if c.cta %}
+            <span class="contact-cta">{{ c.cta }}</span>
+            {% endif %}
+          </a>
+          {% else %}
+          <span class="contact-text">{{ c.text }}</span>
+          {% endif %}
 
-      {% if c.key == "phone" %}
-      <button
-        type="button"
-        class="copy-phone-btn"
-        data-phone="{{ c.text }}"
-        title="Copiar telefone"
-        onclick="copyPhoneToClipboard(this)"
-      >copiar</button>
-      <span class="copy-phone-feedback" aria-live="polite"></span>
-      {% endif %}
-    </div>
-    {% endfor %}
-  </div>
+          {% if c.key == "phone" %}
+          <button
+            type="button"
+            class="copy-phone-btn"
+            data-phone="{{ c.text }}"
+            title="Copiar telefone"
+            onclick="copyPhoneToClipboard(this)"
+          >copiar</button>
+          <span class="copy-phone-feedback" aria-live="polite"></span>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
     </header>
 
     <section class="headline">
@@ -73,7 +71,15 @@ href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;
             {% for entry in section.entries %}
             <article class="entry">
               <div class="entry-header">
-                <h3>{{ entry.title }}{% if entry.company %} — {{ entry.company }}{% endif %}</h3>
+                <h3>
+                  {% if entry.link %}
+                    <a href="{{ entry.link }}" target="_blank" class="project-link">
+                      {{ entry.title }}{% if entry.company %} — {{ entry.company }}{% endif %}<span class="link-icon">↗</span>
+                    </a>
+                  {% else %}
+                    {{ entry.title }}{% if entry.company %} — {{ entry.company }}{% endif %}
+                  {% endif %}
+                </h3>
                 <div class="entry-date">
                   {% if entry.start %}{{ entry.start }}{% endif %}
                   {% if entry.end and entry.end != entry.start %} — {{ entry.end }}{% endif %}
@@ -97,47 +103,34 @@ href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;
             {% endfor %}
           {% endif %}
         {% endfor %}
-
+        
         <h2 class="h2">Formações Acadêmicas</h2>
 
         {% for section in body_sections %}
           {% if section.name == "Education" %}
             {% for entry in section.entries %}
-        <article class="education-entry">
-          <span class="education-entry-title">{{ entry.title }}</span>
-          {% if entry.company %}
-          <span class="education-entry-sep">—</span>
-          <span class="education-entry-company">{{ entry.company }}</span>
-          {% endif %}
-          {% if entry.start or entry.end %}
-          <span class="education-entry-sep">|</span>
-          <span class="education-entry-date">
-            {%- if entry.start and entry.end and entry.end != entry.start -%}
-              {{ entry.start }} — {{ entry.end }}
-            {%- elif entry.start -%}
-              {{ entry.start }}
-            {%- else -%}
-              {{ entry.end }}
-            {%- endif -%}
-          </span>
-          {% endif %}
-        </article>
+            <article class="education-entry">
+              <span class="education-entry-title">{{ entry.title }}</span>
+              {% if entry.company %}
+              <span class="education-entry-sep">—</span>
+              <span class="education-entry-company">{{ entry.company }}</span>
+              {% endif %}
+              {% if entry.start or entry.end %}
+              <span class="education-entry-sep">|</span>
+              <span class="education-entry-date">
+                {%- if entry.start and entry.end and entry.end != entry.start -%}
+                  {{ entry.start }} — {{ entry.end }}
+                {%- elif entry.start -%}
+                  {{ entry.start }}
+                {%- else -%}
+                  {{ entry.end }}
+                {%- endif -%}
+              </span>
+              {% endif %}
+            </article>
             {% endfor %}
           {% endif %}
         {% endfor %}
-
-        {% if extra_education and extra_education|length > 0 %}
-        <div class="extra-education">
-          <div class="h2-secondary">Cursos &amp; Aperfeiçoamentos</div>
-          <div class="extra-education-tags">
-            {% for item in extra_education %}
-            <span class="extra-education-tag">
-              {{ item.title }}{% if item.institution %} — {{ item.institution }}{% endif %}{% if item.year %}, {{ item.year }}{% endif %}
-            </span>
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
       </section>
 
       <section class="competency-column">
@@ -148,13 +141,27 @@ href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;
           <div class="competency-block">
             <h3>{{ group.title }}</h3>
             <ul>
-             {% for item in group["items"] %}
+              {% for item in group["items"] %}
               <li>{{ item }}</li>
               {% endfor %}
             </ul>
           </div>
           {% endfor %}
         </div>
+
+        {# 👇 O BLOCO FOI MOVIDO PARA CÁ COM SUCESSO #}
+        {% if extra_education and extra_education|length > 0 %}
+        <div class="extra-education" style="margin-top: 20px;">
+          <div class="h2-secondary">Cursos &amp; Aperfeiçoamentos</div>
+          <div class="extra-education-tags">
+            {% for item in extra_education %}
+            <span class="extra-education-tag">
+              {{ item.title }}{% if item.institution %} — {{ item.institution }}{% endif %}{% if item.year %}, {{ item.year }}{% endif %}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
       </section>
     </main>
   </div>
@@ -178,7 +185,6 @@ href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;
           showFeedback('não foi possível copiar — selecione o texto manualmente');
         });
       } else {
-        // Fallback para navegadores sem Clipboard API (raro hoje em dia).
         showFeedback('selecione o texto manualmente para copiar');
       }
     }

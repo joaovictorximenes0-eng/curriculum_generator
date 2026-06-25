@@ -39,6 +39,25 @@ def slugify(text):
     text = re.sub(r'[\s_-]+', '_', text)
     return text
 
+def detect_file_focus(vaga_text, default_title):
+    """Analisa o texto da vaga e resume o foco em apenas 1 ou 2 palavras para o nome do arquivo."""
+    if not vaga_text:
+        return default_title
+        
+    vaga_lower = vaga_text.lower()
+    
+    # Define grupos simples de palavras-chave para o nome do arquivo
+    if any(w in vaga_lower for w in ["java", "backend", "spring", "servlet"]):
+        return "Backend_Java"
+    elif any(w in vaga_lower for w in ["dados", "power bi", "pandas", "bi", "sql", "analytics","python"]):
+        return "Engenharia_de_Dados"
+    elif any(w in vaga_lower for w in ["n8n", "selenium", "automação", "rpa"]):
+        return "Automacao"
+    elif any(w in vaga_lower for w in ["design", "ui", "ux", "photoshop"]):
+        return "Design_UI_UX"
+        
+    return default_title # Fallback caso seja uma vaga genérica
+
 def main():
     # AQUI ESTÁ A MÁGICA: O Python monta o quebra-cabeça dos arquivos para você
     master_raw = load_modular_resume(INPUT_DIR)
@@ -89,10 +108,14 @@ def main():
 
     # Nome personalizado 
     user_name = master.get("full_name", "place_holder")
-    cargo_foco = master.get("headline_title", "Desenvolvedor") 
+    primeiros_nomes = " ".join(user_name.split()[:2])
+
+    default_title = master.get("headline_title", "Desenvolvedor") 
+
+    foco_vaga = detect_file_focus(vaga_text, default_title)
 
     # 2. Gera os nomes de arquivos limpos e seguros
-    base_name = f"{slugify(user_name)}_{slugify(cargo_foco)}"
+    base_name = f"{slugify(primeiros_nomes)}_{slugify(foco_vaga)}"
     
     # 3. Monta os caminhos (Path) finais apontando para a pasta output/
     dinamico_html = OUTPUT_DIR / f"{base_name}.html"

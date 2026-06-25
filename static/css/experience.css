@@ -55,3 +55,14 @@
   position: absolute;
   left: 0;
 }
+
+.project-link {
+    color: inherit; /* Copia exatamente a cor padrão do seu h3 (preto ou azul escuro) */
+    text-decoration: none; /* Remove o sublinhado padrão feio do HTML */
+    transition: color 0.2s ease-in-out;
+}
+
+.project-link:hover {
+    text-decoration: underline; /* Mostra o sublinhado só no hover para indicar que é clicável */
+    color: #0056b3; /* Opcional: muda levemente a cor ao passar o mouse se quiser um feedback visual */
+}

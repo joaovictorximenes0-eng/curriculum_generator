@@ -39,9 +39,9 @@ def build_contacts(ctx):
             text = value
 
         if contact_type["key"] == "email":
-            cta = "contato →"
+            cta = "contato ↗"
         elif contact_type["key"] == "github":
-            cta = "projetos →"
+            cta = "projetos ↗"
         else:
             cta = ""
 

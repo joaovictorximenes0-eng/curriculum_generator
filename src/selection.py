@@ -165,15 +165,14 @@ def resolve_experiences(master, vaga_lower):
         
         description_text = "\n".join(f"- {t}" for t in final_bullets_text if t)
         
+        exp_dinamica = exp.copy() 
+        exp_dinamica["description"] = description_text  # Atualiza ou injeta a descrição filtrada
+        if "bullets" in exp_dinamica: 
+            del exp_dinamica["bullets"] # Limpa os bullets brutos para não inflar o HTML à toa
+        
         scored_exps.append({
             "score": exp_score,
-            "data": {
-                "start": exp.get("start", ""),
-                "end": exp.get("end", ""),
-                "title": title,
-                "company": company,
-                "description": description_text,
-            }
+            "data": exp_dinamica # Passa o dicionário completo com QUALQUER chave que você criar no YAML
         })
         
     # Ordena as experiências: Matches de vaga primeiro
@@ -224,15 +223,7 @@ def apply_selection(master, vaga_text):
     resolved["body"] = {
         "Experience": resolve_experiences(master, vaga_lower),
         # Formação Acadêmica Principal sempre entra completa (visto que são poucas e vitais)
-        "Education": [
-            {
-                "start": edu.get("start", ""),
-                "end": edu.get("end", ""),
-                "title": edu.get("title", ""),
-                "company": edu.get("company", ""),
-                "description": edu.get("description", ""),
-            } for edu in (master.get("education_bank") or [])
-        ],
+        "Education": [edu.copy() for edu in (master.get("education_bank") or [])],
     }
     resolved["extra_education"] = resolve_extra_education(master, vaga_lower)
 
