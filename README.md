@@ -1,5 +1,5 @@
 
-🚀 Smart Resume Generator (AI-Driven ATS Optimizer)
+## 🚀 Smart Resume Generator (AI-Driven ATS Optimizer)
 
 Este é um ecossistema automatizado em Python para geração e otimização de currículos baseado em dados. O projeto evoluiu de um gerador estático para um  **motor de triagem analítico orientado a requisitos ( *Data-Driven* )** .
 
