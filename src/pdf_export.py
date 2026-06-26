@@ -14,27 +14,31 @@ Por que Playwright e não weasyprint: o template usa CSS Grid pesado e
 o objetivo é PDF pixel-idêntico ao HTML. Weasyprint não suporta Grid.
 """
 from pathlib import Path
+from shutil import which
 
 
 # Caminhos comuns de Chrome/Brave por sistema operacional.
 # O Playwright aceita um `executable_path` para usar qualquer binário
 # compatível com o protocolo Chrome DevTools (CDP).
 _BROWSER_CANDIDATES = [
-    # Linux
-    "/usr/bin/google-chrome",
-    "/usr/bin/google-chrome-stable",
-    "/usr/bin/brave-browser",
-    "/usr/bin/brave",
-    "/usr/bin/chromium",
-    "/usr/bin/chromium-browser",
-    # macOS
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
-    "/Applications/Chromium.app/Contents/MacOS/Chromium",
-    # Windows (Path() resolve barras automaticamente)
-    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-    r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
+        "google-chrome",
+        "chrome",
+        "msedge",
+        "brave",
+        "/usr/bin/google-chrome",
+        "/usr/bin/google-chrome-stable",
+        "/usr/bin/brave-browser",
+        "/usr/bin/brave",
+        "/usr/bin/chromium",
+        "/usr/bin/chromium-browser",
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
+        "/Applications/Chromium.app/Contents/MacOS/Chromium",
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe",
+        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
 ]
 
 
@@ -44,6 +48,11 @@ def _find_system_browser():
         p = Path(path)
         if p.exists():
             return str(p)
+        
+        found = which(path)
+        if found:
+            return found
+    
     return None
 
 
@@ -84,13 +93,10 @@ def export_pdf(html_path: Path, pdf_path: Path) -> bool:
 
             browser = p.chromium.launch(**launch_kwargs)
             page = browser.new_page()
-            page.goto(file_url)
-
-            #Edição apagar 2 linhas brancas
+            page.goto(file_url, wait_until="load")
             page.emulate_media(media="print")
-            page.wait_for_timeout(800)
-
-            page.wait_for_timeout(800)
+            page.wait_for_load_state("networkidle")
+            
             page.pdf(
                 path=str(pdf_path),
                 format="A4",
