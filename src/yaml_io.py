@@ -10,9 +10,19 @@ PLACEHOLDER_RE = re.compile(r"\$\{([A-Z0-9_]+)\}")
 
 
 def load_yaml(path: Path):
-    """Lê um arquivo YAML e devolve um dict (ou {} se o arquivo estiver vazio)."""
+    """
+    Lê um arquivo YAML.
+
+    Se ele não existir, tenta automaticamente a versão em input/sample/,
+    permitindo que o projeto funcione logo após o clone.
+    """
     if not path.exists():
-        return {}
+        sample_path = path.parent / "sample" / path.name
+        if sample_path.exists():
+            path = sample_path
+        else:
+            return {}
+
     with path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
 

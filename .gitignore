@@ -7,4 +7,6 @@ build/
 *.html
 bia/
 
-renomeia/
+input/*.yaml
+!input/sample/
+!input/sample/*.yaml
