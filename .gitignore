@@ -6,4 +6,5 @@ build/
 *.pdf
 *.html
 bia/
-me_renomeia_dps/
+input/
+samples/
