@@ -1,8 +1,9 @@
 output/
 resume_private/output/
-input/
 build/
 *.exe
 *.pyc
 *.pdf
 *.html
+bia/
+me_renomeia_dps/
