@@ -28,6 +28,13 @@ O projeto resolve de forma automatizada o problema do limite físico do papel (A
 
 ```
 ├── input/                          # Dados de entrada (Modulares YAML)
+|   |──samples/                     # Arquivos de exemplo
+|       |── description_sample.yaml           
+│       ├── education_sample.yaml          
+│       ├── experience_sample.yaml             
+│       ├── secrets_sample.yaml                
+│       ├── skills_sample.yaml                 
+
 │   ├── description.yaml            # Resumos profissionais e objetivos
 │   ├── education.yaml              # Formações acadêmicas principais
 │   ├── experience.yaml             # Banco de experiências e projetos com tags
