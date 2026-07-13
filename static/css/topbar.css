@@ -8,6 +8,15 @@
 
 /* --- Estrutura geral --- */
 
+.topbar-label {
+  margin: 0 0 8px 0;
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-topbar-headline);
+}
+
 .topbar {
   display: grid;
   grid-template-columns: 1.2fr 0.75fr;

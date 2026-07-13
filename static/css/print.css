@@ -1,12 +1,4 @@
-/*
- * print.css — Regras de impressão e exportação para PDF
- *
- * Garante que o PDF gerado (via Playwright em pdf_export.py) fique
- * idêntico ao HTML, sem padding do body, fundo branco, e dimensões
- * A4 exatas. Também esconde controles interativos que não fazem sentido
- * em PDF (botões de copiar, fallback de email).
- */
-
+/* print.css */
 @media print {
   body {
     padding: 0;
@@ -15,10 +7,25 @@
 
   .page {
     width: 210mm;
-    height: 297mm;
+    min-height: 297mm;
   }
 
-  /* Controles interativos — só existem no HTML, PDFs não rodam JS */
+  .layout {
+    display: block;
+  }
+
+  .experience-column,
+  .competency-column {
+    width: auto;
+    min-width: 0;
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .competency-column {
+    margin-top: 12px;
+  }
+
   .copy-email-btn,
   .copy-email-feedback,
   .copy-phone-btn,

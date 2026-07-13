@@ -1,57 +1,36 @@
-/*
- * layout.css — Grid de duas colunas e títulos de seção
- *
- * Define a estrutura macro do currículo abaixo da headline:
- * coluna de experiências (esquerda, mais larga) e coluna de
- * competências (direita), e a hierarquia tipográfica de títulos de seção.
- */
-
-/* --- Grid principal --- */
-
 .layout {
   display: grid;
-  grid-template-columns: 1.9fr 1fr;
+  grid-template-columns: minmax(0, 1.9fr) minmax(250px, 1fr);
   gap: 24px;
   padding: 20px 18px 18px 18px;
+  align-items: start;
 }
 
-.experience-column {
+.experience-column,
+.competency-column {
   min-width: 0;
 }
 
 .competency-column {
-  min-width: 0;
   padding-left: 15px;
   border-left: 1px solid var(--color-border-column);
-  margin-top:0px;
+  margin-top: 0;
 }
 
-/* --- Títulos de seção --- */
+@media print {
+  .layout {
+    display: block;
+    padding: 0;
+  }
 
-/* Nível primário: Experiências e Competências Técnicas.
-   Uppercase, peso máximo, linha separadora escura. */
-h2 {
-  letter-spacing: 0.02em;
-  margin: 0 0 10px 0;
-  font-size: 13pt;
-  line-height: 1.1;
-  font-weight: 700;
-  text-transform: uppercase;
-  border-bottom: 1.5px solid var(--color-border-primary);
-  padding-bottom: 4px;
-}
+  .experience-column,
+  .competency-column {
+    width: auto;
+    padding-left: 0;
+    border-left: 0;
+  }
 
-/* Nível secundário: Formações Acadêmicas e Cursos & Aperfeiçoamentos.
-   Sem uppercase, cor suavizada, linha mais fina — visualmente recuado
-   na hierarquia para não competir com as seções principais. */
-.h2-secondary {
-  letter-spacing: 0.01em;
-  margin: 18px 0 8px 0;
-  font-size: 10.5pt;
-  line-height: 1.1;
-  font-weight: 700;
-  text-transform: none;
-  color: var(--color-text-muted);
-  border-bottom: 1px solid var(--color-border-secondary);
-  padding-bottom: 3px;
+  .competency-column {
+    margin-top: 12px;
+  }
 }

@@ -1,193 +1,238 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ full_name }}</title>
-  <link rel="stylesheet" href="../static/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <script src="static/script.js"></script>   
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap">
-</head>
-<body>
-  <div class="page" style="--density-experience: {{ density.experience if density else 1.0 }}; --density-side: {{ density.side if density else 1.0 }};">
-    <header class="topbar">
-      <div class="topbar-left">
-        <h1>{{ full_name }}</h1>
-        {% if headline_title %}
-        <div class="headline-title">{{ headline_title }}</div>
-        {% endif %}
-      </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ full_name }}</title>
 
-      <div class="topbar-right">
-        {% for c in contacts %}
-        <div class="contact-line contact-line-{{ c.key }}">
-          <span class="contact-icon">{{ c.icon | safe }}</span>
+    <link rel="stylesheet" href="../static/variables.css" />
+    <link rel="stylesheet" href="../static/base.css" />
+    <link rel="stylesheet" href="../static/topbar.css" />
+    <link rel="stylesheet" href="../static/headline.css" />
+    <link rel="stylesheet" href="../static/layout.css" />
+    <link rel="stylesheet" href="../static/experience.css" />
+    <link rel="stylesheet" href="../static/education.css" />
+    <link rel="stylesheet" href="../static/competency.css" />
+    <link rel="stylesheet" href="../static/print.css" />
+  </head>
 
-          {% if c.href %}
-          <a href="{{ c.href }}" target="_blank" rel="noopener" class="contact-link">
-            <span class="contact-text">{{ c.text }}</span>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>{{ full_name }}</h1>
 
-            {% if c.cta %}
-            <span class="contact-cta">{{ c.cta }}</span>
-            {% endif %}
-          </a>
-          {% else %}
-          <span class="contact-text">{{ c.text }}</span>
-          {% endif %}
-
-          {% if c.key == "phone" %}
-          <button
-            type="button"
-            class="copy-phone-btn"
-            data-phone="{{ c.text }}"
-            title="Copiar telefone"
-            onclick="copyPhoneToClipboard(this)"
-          >copiar</button>
-          <span class="copy-phone-feedback" aria-live="polite"></span>
+          {% if headline_title %}
+          <div class="headline-title">{{ headline_title }}</div>
           {% endif %}
         </div>
-        {% endfor %}
-      </div>
-    </header>
 
-    <section class="headline">
-      <p>
-        {% if description_paragraphs and description_paragraphs|length > 0 %}
-          {{ description_paragraphs[0] }}
-        {% else %}
-          Lorem Ipsum
-        {% endif %}
-      </p>
-    </section>
+        <div class="topbar-right">
+          <p class="topbar-label">Contact</p>
 
-    <main class="layout">
-      <section class="experience-column">
-        <h2>Experiências</h2>
+          {% for c in contacts %}
+          <div class="contact-line contact-line-{{ c.key }}">
+            {% if c.href %}
+            <a
+              href="{{ c.href }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="contact-link"
+            >
+              <span class="contact-text">{{ c.text }}</span>
 
-        {% for section in body_sections %}
-          {% if section.name == "Experience" %}
-            {% for entry in section.entries %}
-            <article class="entry">
-              <div class="entry-header">
-                <h3>
-                  {% if entry.link %}
-                    <a href="{{ entry.link }}" target="_blank" class="project-link">
-                      {{ entry.title }}{% if entry.company %} — {{ entry.company }}{% endif %}<span class="link-icon">↗</span>
-                    </a>
-                  {% else %}
-                    {{ entry.title }}{% if entry.company %} — {{ entry.company }}{% endif %}
-                  {% endif %}
-                </h3>
-                <div class="entry-date">
-                  {% if entry.start %}{{ entry.start }}{% endif %}
-                  {% if entry.end and entry.end != entry.start %} — {{ entry.end }}{% endif %}
-                </div>
-              </div>
-
-              {% if entry.description_items and entry.description_items|length > 0 %}
-              <ul class="entry-description">
-                {% for item in entry.description_items %}
-                <li>{{ item }}</li>
-                {% endfor %}
-              </ul>
-              {% else %}
-              <ul class="entry-description">
-                {% for p in entry.description_paragraphs %}
-                <li>{{ p }}</li>
-                {% endfor %}
-              </ul>
+              {% if c.cta %}
+              <span class="contact-cta">{{ c.cta }}</span>
               {% endif %}
-            </article>
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-        
-        <h2 class="h2">Formações Acadêmicas</h2>
+            </a>
+            {% else %}
+            <span class="contact-text">{{ c.text }}</span>
+            {% endif %}
 
-        {% for section in body_sections %}
-          {% if section.name == "Education" %}
-            {% for entry in section.entries %}
-            <article class="education-entry">
-              <span class="education-entry-title">{{ entry.title }}</span>
-              {% if entry.company %}
-              <span class="education-entry-sep">—</span>
-              <span class="education-entry-company">{{ entry.company }}</span>
-              {% endif %}
-              {% if entry.start or entry.end %}
-              <span class="education-entry-sep">|</span>
-              <span class="education-entry-date">
-                {%- if entry.start and entry.end and entry.end != entry.start -%}
-                  {{ entry.start }} — {{ entry.end }}
-                {%- elif entry.start -%}
-                  {{ entry.start }}
-                {%- else -%}
-                  {{ entry.end }}
-                {%- endif -%}
-              </span>
-              {% endif %}
-            </article>
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-      </section>
-
-      <section class="competency-column">
-        <h2>Competências Técnicas</h2>
-
-        <div class="competency-list">
-          {% for group in competency_blocks %}
-          <div class="competency-block">
-            <h3>{{ group.title }}</h3>
-            <ul>
-              {% for item in group["items"] %}
-              <li>{{ item }}</li>
-              {% endfor %}
-            </ul>
+            {% if c.key == "phone" %}
+            <button
+              type="button"
+              class="copy-phone-btn"
+              data-phone="{{ c.text }}"
+              title="Copiar telefone"
+              onclick="copyPhoneToClipboard(this)"
+            >
+              copiar
+            </button>
+            <span class="copy-phone-feedback" aria-live="polite"></span>
+            {% endif %}
           </div>
           {% endfor %}
         </div>
+      </header>
 
-        {# 👇 O BLOCO FOI MOVIDO PARA CÁ COM SUCESSO #}
-        {% if extra_education and extra_education|length > 0 %}
-        <div class="extra-education" style="margin-top: 20px;">
-          <div class="h2-secondary">Cursos &amp; Aperfeiçoamentos</div>
-          <div class="extra-education-tags">
-            {% for item in extra_education %}
-            <span class="extra-education-tag">
-              {{ item.title }}{% if item.institution %} — {{ item.institution }}{% endif %}{% if item.year %}, {{ item.year }}{% endif %}
-            </span>
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
+      {% if description_paragraphs and description_paragraphs|length > 0 %}
+      <section class="headline">
+        <h2>Summary</h2>
+
+        {% for p in description_paragraphs %}
+        <p>{{ p }}</p>
+        {% endfor %}
       </section>
-    </main>
-  </div>
+      {% endif %}
 
-  <script>
-    function copyEmailToClipboard(button) {
-      var email = button.getAttribute('data-email');
-      var feedback = button.nextElementSibling;
+      <main class="layout">
+        <section class="experience-column" aria-label="Experience and Education">
+          <section class="section">
+            <h2>Experience</h2>
 
-      function showFeedback(message) {
-        if (feedback) {
-          feedback.textContent = message;
-          setTimeout(function () { feedback.textContent = ''; }, 2000);
+            {% for section in body_sections %}
+              {% if section.name == "Experience" %}
+                {% for entry in section.entries %}
+                <article class="entry">
+                  <div class="entry-header">
+                    <div class="entry-header-main">
+                      <h3 class="entry-title">
+                        {% if entry.link %}
+                        <a
+                          href="{{ entry.link }}"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="entry-link"
+                        >
+                          {{ entry.title }}
+                        </a>
+                        {% else %}
+                        {{ entry.title }}
+                        {% endif %}
+                      </h3>
+
+                      {% if entry.company %}
+                      <p class="entry-company">{{ entry.company }}</p>
+                      {% endif %}
+                    </div>
+
+                    {% if entry.start or entry.end %}
+                    <p class="entry-date">
+                      {% if entry.start %}{{ entry.start }}{% endif %}
+                      {% if entry.end and entry.end != entry.start %}
+                      — {{ entry.end }}
+                      {% endif %}
+                    </p>
+                    {% endif %}
+                  </div>
+
+                  {% if entry.description_items and entry.description_items|length > 0 %}
+                  <ul class="entry-description">
+                    {% for item in entry.description_items %}
+                    <li>{{ item }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% elif entry.description_paragraphs and entry.description_paragraphs|length > 0 %}
+                  <ul class="entry-description">
+                    {% for p in entry.description_paragraphs %}
+                    <li>{{ p }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </article>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </section>
+
+          <section class="section">
+            <h2>Education</h2>
+
+            {% for section in body_sections %}
+              {% if section.name == "Education" %}
+                {% for entry in section.entries %}
+                <article class="education-entry">
+                  <div class="entry-header">
+                    <div class="entry-header-main">
+                      <h3 class="entry-title">{{ entry.title }}</h3>
+
+                      {% if entry.company %}
+                      <p class="entry-company">{{ entry.company }}</p>
+                      {% endif %}
+                    </div>
+
+                    {% if entry.start or entry.end %}
+                    <p class="entry-date">
+                      {% if entry.start %}{{ entry.start }}{% endif %}
+                      {% if entry.end and entry.end != entry.start %}
+                      — {{ entry.end }}
+                      {% endif %}
+                    </p>
+                    {% endif %}
+                  </div>
+                </article>
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </section>
+        </section>
+
+        <section class="competency-column" aria-label="Skills and Courses">
+          {% if competency_blocks and competency_blocks|length > 0 %}
+          <section class="section skills-section">
+            <h2>Skills</h2>
+
+            <div class="competency-list">
+              {% for group in competency_blocks %}
+              <article class="competency-block">
+                <h3>{{ group.title }}</h3>
+
+                <ul>
+                  {% for item in group["items"] %}
+                  <li>{{ item }}</li>
+                  {% endfor %}
+                </ul>
+              </article>
+              {% endfor %}
+            </div>
+          </section>
+          {% endif %}
+
+          {% if extra_education and extra_education|length > 0 %}
+          <section class="section extra-education">
+            <h2>Courses &amp; Training</h2>
+
+            <div class="extra-education-tags">
+              {% for item in extra_education %}
+              <span class="extra-education-tag">
+                {{ item.title }}{% if item.institution %} — {{ item.institution }}{% endif %}{% if item.year %}, {{ item.year }}{% endif %}
+              </span>
+              {% endfor %}
+            </div>
+          </section>
+          {% endif %}
+        </section>
+      </main>
+    </div>
+
+    <script>
+      function copyPhoneToClipboard(button) {
+        var phone = button.getAttribute("data-phone");
+        var feedback = button.nextElementSibling;
+
+        function showFeedback(message) {
+          if (feedback) {
+            feedback.textContent = message;
+            setTimeout(function () {
+              feedback.textContent = "";
+            }, 2000);
+          }
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard
+            .writeText(phone)
+            .then(function () {
+              showFeedback("copied!");
+            })
+            .catch(function () {
+              showFeedback("could not copy — select the text manually");
+            });
+        } else {
+          showFeedback("select the text manually to copy");
         }
       }
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(email).then(function () {
-          showFeedback('copiado!');
-        }).catch(function () {
-          showFeedback('não foi possível copiar — selecione o texto manualmente');
-        });
-      } else {
-        showFeedback('selecione o texto manualmente para copiar');
-      }
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>
