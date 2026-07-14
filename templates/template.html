@@ -17,49 +17,49 @@
   </head>
 
   <body>
-    <div class="page">
-      <header class="topbar">
-        <div class="topbar-left">
-          <h1>{{ full_name }}</h1>
+    <div class="page page--resume">
+      <header class="topbar topbar--resume" aria-label="Cabeçalho">
+        <div class="topbar-left topbar__identity">
+          <h1 class="topbar__name">{{ full_name }}</h1>
 
           {% if headline_title %}
-          <div class="headline-title">{{ headline_title }}</div>
+          <div class="headline-title topbar__headline">{{ headline_title }}</div>
           {% endif %}
         </div>
 
-        <div class="topbar-right">
-          <p class="topbar-label">Contact</p>
+        <div class="topbar-right topbar__contact" aria-label="Contato">
+          <p class="topbar-label topbar__contact-label">Contact</p>
 
           {% for c in contacts %}
-          <div class="contact-line contact-line-{{ c.key }}">
+          <div class="contact-line contact-line--{{ c.key }}" data-contact-key="{{ c.key }}">
             {% if c.href %}
             <a
               href="{{ c.href }}"
               target="_blank"
               rel="noopener noreferrer"
-              class="contact-link"
+              class="contact-link contact-link--{{ c.key }}"
             >
-              <span class="contact-text">{{ c.text }}</span>
+              <span class="contact-text contact-text--value">{{ c.text }}</span>
 
               {% if c.cta %}
-              <span class="contact-cta">{{ c.cta }}</span>
+              <span class="contact-cta contact-link__cta">{{ c.cta }}</span>
               {% endif %}
             </a>
             {% else %}
-            <span class="contact-text">{{ c.text }}</span>
+            <span class="contact-text contact-text--value">{{ c.text }}</span>
             {% endif %}
 
             {% if c.key == "phone" %}
             <button
               type="button"
-              class="copy-phone-btn"
+              class="copy-phone-btn contact-action contact-action--copy"
               data-phone="{{ c.text }}"
               title="Copiar telefone"
               onclick="copyPhoneToClipboard(this)"
             >
               copiar
             </button>
-            <span class="copy-phone-feedback" aria-live="polite"></span>
+            <span class="copy-phone-feedback contact-action__feedback" aria-live="polite"></span>
             {% endif %}
           </div>
           {% endfor %}
@@ -67,120 +67,126 @@
       </header>
 
       {% if description_paragraphs and description_paragraphs|length > 0 %}
-      <section class="headline">
-        <h2>Summary</h2>
+      <section class="headline headline--summary section section--summary" aria-label="Resumo">
+        <h2 class="section__title headline__title">Summary</h2>
 
-        {% for p in description_paragraphs %}
-        <p>{{ p }}</p>
-        {% endfor %}
+        <div class="headline__content">
+          {% for p in description_paragraphs %}
+          <p class="headline__paragraph">{{ p }}</p>
+          {% endfor %}
+        </div>
       </section>
       {% endif %}
 
-      <main class="layout">
-        <section class="experience-column" aria-label="Experience and Education">
-          <section class="section">
-            <h2>Experience</h2>
+      <main class="layout layout--resume" aria-label="Conteúdo principal">
+        <section class="experience-column layout__main" aria-label="Experience and Education">
+          <section class="section section--experience" aria-label="Experience">
+            <h2 class="section__title section__title--experience">Experience</h2>
 
-            {% for section in body_sections %}
-              {% if section.name == "Experience" %}
-                {% for entry in section.entries %}
-                <article class="entry">
-                  <div class="entry-header">
-                    <div class="entry-header-main">
-                      <h3 class="entry-title">
-                        {% if entry.link %}
-                        <a
-                          href="{{ entry.link }}"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="entry-link"
-                        >
+            <div class="section__content section__content--experience">
+              {% for section in body_sections %}
+                {% if section.name == "Experience" %}
+                  {% for entry in section.entries %}
+                  <article class="entry entry--experience">
+                    <header class="entry-header entry__header">
+                      <div class="entry-header-main entry__identity">
+                        <h3 class="entry-title entry__title">
+                          {% if entry.link %}
+                          <a
+                            href="{{ entry.link }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="entry-link entry__link"
+                          >
+                            {{ entry.title }}
+                          </a>
+                          {% else %}
                           {{ entry.title }}
-                        </a>
-                        {% else %}
-                        {{ entry.title }}
+                          {% endif %}
+                        </h3>
+
+                        {% if entry.company %}
+                        <p class="entry-company entry__company">{{ entry.company }}</p>
                         {% endif %}
-                      </h3>
+                      </div>
 
-                      {% if entry.company %}
-                      <p class="entry-company">{{ entry.company }}</p>
+                      {% if entry.start or entry.end %}
+                      <p class="entry-date entry__date">
+                        {% if entry.start %}{{ entry.start }}{% endif %}
+                        {% if entry.end and entry.end != entry.start %}
+                        — {{ entry.end }}
+                        {% endif %}
+                      </p>
                       {% endif %}
-                    </div>
+                    </header>
 
-                    {% if entry.start or entry.end %}
-                    <p class="entry-date">
-                      {% if entry.start %}{{ entry.start }}{% endif %}
-                      {% if entry.end and entry.end != entry.start %}
-                      — {{ entry.end }}
-                      {% endif %}
-                    </p>
+                    {% if entry.description_items and entry.description_items|length > 0 %}
+                    <ul class="entry-description entry__description">
+                      {% for item in entry.description_items %}
+                      <li class="entry-description__item">{{ item }}</li>
+                      {% endfor %}
+                    </ul>
+                    {% elif entry.description_paragraphs and entry.description_paragraphs|length > 0 %}
+                    <ul class="entry-description entry__description">
+                      {% for p in entry.description_paragraphs %}
+                      <li class="entry-description__item">{{ p }}</li>
+                      {% endfor %}
+                    </ul>
                     {% endif %}
-                  </div>
-
-                  {% if entry.description_items and entry.description_items|length > 0 %}
-                  <ul class="entry-description">
-                    {% for item in entry.description_items %}
-                    <li>{{ item }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% elif entry.description_paragraphs and entry.description_paragraphs|length > 0 %}
-                  <ul class="entry-description">
-                    {% for p in entry.description_paragraphs %}
-                    <li>{{ p }}</li>
-                    {% endfor %}
-                  </ul>
-                  {% endif %}
-                </article>
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
+                  </article>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            </div>
           </section>
 
-          <section class="section">
-            <h2>Education</h2>
+          <section class="section section--education" aria-label="Education">
+            <h2 class="section__title section__title--education">Education</h2>
 
-            {% for section in body_sections %}
-              {% if section.name == "Education" %}
-                {% for entry in section.entries %}
-                <article class="education-entry">
-                  <div class="entry-header">
-                    <div class="entry-header-main">
-                      <h3 class="entry-title">{{ entry.title }}</h3>
+            <div class="section__content section__content--education">
+              {% for section in body_sections %}
+                {% if section.name == "Education" %}
+                  {% for entry in section.entries %}
+                  <article class="education-entry education-entry--item">
+                    <header class="entry-header education-entry__header">
+                      <div class="entry-header-main education-entry__identity">
+                        <h3 class="entry-title education-entry__title">{{ entry.title }}</h3>
 
-                      {% if entry.company %}
-                      <p class="entry-company">{{ entry.company }}</p>
+                        {% if entry.company %}
+                        <p class="entry-company education-entry__company">{{ entry.company }}</p>
+                        {% endif %}
+                      </div>
+
+                      {% if entry.start or entry.end %}
+                      <p class="entry-date education-entry__date">
+                        {% if entry.start %}{{ entry.start }}{% endif %}
+                        {% if entry.end and entry.end != entry.start %}
+                        — {{ entry.end }}
+                        {% endif %}
+                      </p>
                       {% endif %}
-                    </div>
-
-                    {% if entry.start or entry.end %}
-                    <p class="entry-date">
-                      {% if entry.start %}{{ entry.start }}{% endif %}
-                      {% if entry.end and entry.end != entry.start %}
-                      — {{ entry.end }}
-                      {% endif %}
-                    </p>
-                    {% endif %}
-                  </div>
-                </article>
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
+                    </header>
+                  </article>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            </div>
           </section>
         </section>
 
-        <section class="competency-column" aria-label="Skills and Courses">
+        <section class="competency-column layout__aside" aria-label="Skills and Courses">
           {% if competency_blocks and competency_blocks|length > 0 %}
-          <section class="section skills-section">
-            <h2>Skills</h2>
+          <section class="section section--skills skills-section" aria-label="Skills">
+            <h2 class="section__title section__title--skills">Skills</h2>
 
-            <div class="competency-list">
+            <div class="competency-list skills-grid">
               {% for group in competency_blocks %}
-              <article class="competency-block">
-                <h3>{{ group.title }}</h3>
+              <article class="competency-block skill-group skill-group--{{ group.title|lower|replace(' & ', '-')|replace(' ', '-') }}">
+                <h3 class="skill-group__title">{{ group.title }}</h3>
 
-                <ul>
+                <ul class="skill-group__list">
                   {% for item in group["items"] %}
-                  <li>{{ item }}</li>
+                  <li class="skill-group__item">{{ item }}</li>
                   {% endfor %}
                 </ul>
               </article>
@@ -190,12 +196,12 @@
           {% endif %}
 
           {% if extra_education and extra_education|length > 0 %}
-          <section class="section extra-education">
-            <h2>Courses &amp; Training</h2>
+          <section class="section section--courses extra-education courses-section" aria-label="Courses">
+            <h2 class="section__title section__title--courses">Courses &amp; Training</h2>
 
-            <div class="extra-education-tags">
+            <div class="extra-education-tags courses-list">
               {% for item in extra_education %}
-              <span class="extra-education-tag">
+              <span class="extra-education-tag course-tag">
                 {{ item.title }}{% if item.institution %} — {{ item.institution }}{% endif %}{% if item.year %}, {{ item.year }}{% endif %}
               </span>
               {% endfor %}
