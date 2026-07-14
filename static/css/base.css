@@ -7,15 +7,79 @@ html, body {
   margin: 0;
   padding: 0;
   background: var(--color-bg-main);
-  font-family: 'Poppins', Helvetica, sans-serif;
-  color: var(--color-text-main);
-  /* Sem tamanhos fixos aqui para permitir o scroll natural do navegador */
+  /* Estilos de fonte removidos para você controlar em outro arquivo */
 }
 
 body {
-  padding: 24px 18px; /* Dá um respiro nas bordas da tela ao visualizar o HTML */
+  padding: 24px 18px; /* Respiro apenas para visualização no navegador */
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
+}
+
+/* 2. A Estrutura do Documento no Navegador (Suporta múltiplas páginas) */
+.page {
+  width: 210mm;
+  /* Altura mínima de uma página A4, mas cresce infinitamente caso haja mais conteúdo */
+  min-height: 297mm; 
+  margin: 0 auto;
+  background: var(--color-bg-page);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  
+  /* PERMITE QUE O CONTEÚDO FLUA (Removido overflow: hidden) */
+  overflow: visible; 
+
+  /* Sombra leve para simular papel apenas na tela */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+}
+
+/* 3. Evitar quebras feias no meio de blocos de texto importantes */
+.entry, 
+.entry__header,
+.education-entry,
+.competency-block,
+.topbar {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Garante que seções grandes evitem quebras bruscas quando possível */
+.section {
+  page-break-inside: auto;
+  break-inside: auto;
+}
+
+/* 4. Configurações exclusivas para a IMPRESSÃO (Geração do PDF de múltiplas páginas) */
+@media print {
+  html, body {
+    width: 210mm;
+    /* Altura automática para o motor do PDF gerar páginas adicionais conforme necessário */
+    height: auto; 
+    overflow: visible;
+    padding: 0;
+    margin: 0;
+    background: #ffffff;
+  }
+
+  body {
+    padding: 0;
+  }
+
+  .page {
+    margin: 0;
+    border: none;
+    box-shadow: none; 
+    width: 210mm;
+    /* Altura mínima de 1 página A4 física por folha impressa */
+    min-height: 297mm; 
+    height: auto;
+  }
+
+  @page {
+    size: A4;
+    margin: 0; /* Margens físicas do PDF zeradas (você controla as margens usando padding na .page se preferir) */
+  }
 }

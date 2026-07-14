@@ -1,54 +1,69 @@
-      .topbar {
-        padding: 40px 48px 32px;
-        border-bottom: 1.5px solid var(--color-border);
-      }
+/* Reset básico para garantir que nenhum navegador empurre o layout */
+.topbar h1, 
+.topbar p, 
+.topbar div {
+  margin: 0;
+  padding: 0;
+}
 
-      .topbar__name {
-        font-family: var(--font-display);
-        font-size: 28px;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        line-height: 1.15;
-        color: var(--color-ink);
-      }
+.topbar {
+  /* Zera o padding vertical. Mantivemos apenas um sopro nas laterais se achar necessário, ou use 0 em tudo */
+  padding: 0px 0px 4px; 
+  border-bottom: 1.5px solid var(--color-border);
+}
 
-      .topbar__headline {
-        font-family: var(--font-display);
-        font-size: 13px;
-        font-weight: 500;
-        color: var(--color-accent);
-        margin-top: 4px;
-      }
+.topbar__name {
+  font-family: var(--font-display);
+  font-size: 24px; /* Reduzido levemente de 28px para economizar linha */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1; /* Linha mais colada ao texto */
+  color: var(--color-ink);
+}
 
-      .topbar__contact {
-        margin-top: 16px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px 20px;
-      }
+.topbar__headline {
+  font-family: var(--font-display);
+  font-size: 12px; /* Reduzido de 13px */
+  font-weight: 500;
+  color: var(--color-accent);
+  margin-top: 1px; /* Espaço mínimo apenas para não encavalar */
+  line-height: 1.1;
+}
 
-      .contact-line {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 12px;
-        color: var(--color-ink);
-      }
+.topbar__contact {
+  margin-top: 4px; /* Reduzido drasticamente de 16px para 4px */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 12px; /* Reduzido o espaçamento vertical e horizontal entre os itens */
+}
 
-      .contact-link { color: var(--color-ink); transition: color 0.15s; }
-      .contact-link:hover { color: var(--color-accent); }
-      .contact-link__cta { font-size: 10px; margin-left: 1px; }
+/* Esconde o label "Contact" que consome uma linha inteira sem necessidade para o ATS */
+.topbar-label.topbar__contact-label {
+  display: none; 
+}
 
-      .contact-action--copy {
-        background: none;
-        border: 1px solid var(--color-border);
-        border-radius: 3px;
-        padding: 0 6px;
-        font-size: 10px;
-        cursor: pointer;
-        color: var(--color-muted);
-        line-height: 1.6;
-        transition: color 0.15s, border-color 0.15s;
-      }
-      .contact-action--copy:hover { color: var(--color-accent); border-color: var(--color-accent); }
-      .contact-action__feedback { font-size: 10px; color: var(--color-muted); }
+.contact-line {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px; /* Reduzido de 12px */
+  color: var(--color-ink);
+  line-height: 1.1;
+}
+
+.contact-link { 
+  color: var(--color-ink); 
+  text-decoration: none;
+}
+
+/* Botão de copiar ultra-compacto */
+.contact-action--copy {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  padding: 0 4px;
+  font-size: 9px;
+  cursor: pointer;
+  color: var(--color-muted);
+  line-height: 1.2;
+}
