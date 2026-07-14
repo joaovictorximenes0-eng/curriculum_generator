@@ -1,0 +1,21 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* 1. Global: Comportamento para a TELA (Navegador) */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg-main);
+  font-family: 'Poppins', Helvetica, sans-serif;
+  color: var(--color-text-main);
+  /* Sem tamanhos fixos aqui para permitir o scroll natural do navegador */
+}
+
+body {
+  padding: 24px 18px; /* Dá um respiro nas bordas da tela ao visualizar o HTML */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}

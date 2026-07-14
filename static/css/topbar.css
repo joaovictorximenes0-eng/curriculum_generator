@@ -1,0 +1,54 @@
+      .topbar {
+        padding: 40px 48px 32px;
+        border-bottom: 1.5px solid var(--color-border);
+      }
+
+      .topbar__name {
+        font-family: var(--font-display);
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        color: var(--color-ink);
+      }
+
+      .topbar__headline {
+        font-family: var(--font-display);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--color-accent);
+        margin-top: 4px;
+      }
+
+      .topbar__contact {
+        margin-top: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 20px;
+      }
+
+      .contact-line {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 12px;
+        color: var(--color-ink);
+      }
+
+      .contact-link { color: var(--color-ink); transition: color 0.15s; }
+      .contact-link:hover { color: var(--color-accent); }
+      .contact-link__cta { font-size: 10px; margin-left: 1px; }
+
+      .contact-action--copy {
+        background: none;
+        border: 1px solid var(--color-border);
+        border-radius: 3px;
+        padding: 0 6px;
+        font-size: 10px;
+        cursor: pointer;
+        color: var(--color-muted);
+        line-height: 1.6;
+        transition: color 0.15s, border-color 0.15s;
+      }
+      .contact-action--copy:hover { color: var(--color-accent); border-color: var(--color-accent); }
+      .contact-action__feedback { font-size: 10px; color: var(--color-muted); }

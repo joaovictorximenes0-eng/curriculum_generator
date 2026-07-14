@@ -1,0 +1,217 @@
+      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500&display=swap');
+
+      /* ── Reset ── */
+      *, *::before, *::after { box-sizing: border-box; }
+      body  { margin: 0; padding: 40px 16px 60px; }
+      a     { color: inherit; text-decoration: none; }
+      ul    { list-style: none; margin: 0; padding: 0; }
+      p, h1, h2, h3 { margin: 0; }
+
+      /* ── Tokens ── */
+      :root {
+        --bg-page:    #f2f1ed;
+        --bg-card:    #ffffff;
+        --ink:        #1c1c28;
+        --muted:      #6b6a72;
+        --accent:     #1e3a5f;
+        --rule:       rgba(28, 28, 40, 0.11);
+        --f-display:  'Plus Jakarta Sans', sans-serif;
+        --f-body:     'Inter', sans-serif;
+      }
+
+      /* ── Page ── */
+      body { background: var(--bg-page); font-family: var(--f-body); font-size: 13px; line-height: 1.6; color: var(--ink); }
+      .page { background: var(--bg-card); max-width: 800px; margin: 0 auto; box-shadow: 0 2px 24px rgba(0,0,0,0.09); }
+
+      /* ── Header ── */
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 32px;
+        padding: 36px 48px 28px;
+        border-bottom: 1.5px solid var(--rule);
+      }
+
+      .topbar__name {
+        font-family: var(--f-display);
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+        color: var(--ink);
+      }
+
+      .topbar__headline {
+        font-family: var(--f-display);
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--accent);
+        margin-top: 5px;
+      }
+
+      .topbar__contact { text-align: right; flex-shrink: 0; }
+
+      .topbar__contact-label {
+        font-family: var(--f-display);
+        font-size: 9px;
+        font-weight: 600;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+
+      .contact-line {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 5px;
+        font-size: 11.5px;
+        margin-bottom: 3px;
+      }
+
+      .contact-link { transition: color 0.15s; }
+      .contact-link:hover { color: var(--accent); }
+      .contact-link__cta { font-size: 9px; }
+
+      .contact-action--copy {
+        background: none;
+        border: 1px solid var(--rule);
+        border-radius: 2px;
+        padding: 0 5px;
+        font-size: 9px;
+        cursor: pointer;
+        color: var(--muted);
+        line-height: 1.7;
+        transition: color 0.15s, border-color 0.15s;
+      }
+      .contact-action--copy:hover { color: var(--accent); border-color: var(--accent); }
+      .contact-action__feedback   { font-size: 9px; color: var(--muted); }
+
+      /* ── Summary ── */
+      .section--summary {
+        padding: 22px 48px;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      /* ── Section title ── */
+      .section__title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--f-display);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 16px;
+      }
+      .section__title::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--rule);
+      }
+
+      .headline__paragraph { font-size: 13px; line-height: 1.65; }
+      .headline__paragraph + .headline__paragraph { margin-top: 8px; }
+
+      /* ══════════════════════════════════════════════
+         ATS FIX: layout principal em coluna única.
+         DOM order já está correto (Experience →
+         Education → Skills → Courses). CSS só
+         precisava deixar de empurrar lado a lado.
+      ══════════════════════════════════════════════ */
+      .layout--resume {
+        display: flex;
+        flex-direction: column;   /* ← era row/grid no style.css original */
+        padding: 28px 48px 44px;
+        gap: 32px;
+      }
+
+      .layout__main,
+      .layout__aside { width: 100%; }
+
+      /* Experience dentro do layout__main também empilha */
+      .layout__main { display: flex; flex-direction: column; gap: 28px; }
+
+      /* ── Entries ── */
+      .section__content { display: flex; flex-direction: column; gap: 22px; }
+
+      .entry__header,
+      .education-entry__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 6px;
+      }
+
+      .entry__title,
+      .education-entry__title {
+        font-family: var(--f-display);
+        font-size: 13.5px;
+        font-weight: 600;
+        line-height: 1.3;
+        color: var(--ink);
+      }
+
+      .entry__link:hover { color: var(--accent); }
+
+      .entry__company,
+      .education-entry__company { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+
+      .entry__date,
+      .education-entry__date {
+        font-family: var(--f-display);
+        font-size: 10.5px;
+        color: var(--muted);
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .entry__description {
+        list-style: disc;
+        padding-left: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-top: 7px;
+      }
+      .entry-description__item { font-size: 12.5px; line-height: 1.6; }
+
+      /* ── Skills ── */
+      .competency-list { display: flex; flex-direction: column; gap: 14px; }
+
+      .skill-group__title {
+        font-family: var(--f-display);
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 4px;
+      }
+
+      .skill-group__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px 6px;
+      }
+
+      .skill-group__item { font-size: 12px; color: var(--ink); }
+      .skill-group__item::after { content: ','; color: var(--muted); }
+      .skill-group__item:last-child::after { content: ''; }
+
+      /* ── Courses ── */
+      .extra-education-tags { display: flex; flex-direction: column; gap: 5px; }
+      .extra-education-tag  { font-size: 12.5px; line-height: 1.6; color: var(--ink); display: block; }
+
+      /* ── Print ── */
+      @media print {
+        body { background: white; padding: 0; }
+        .page { box-shadow: none; max-width: 100%; }
+        .contact-action--copy,
+        .contact-action__feedback { display: none; }
+      }
