@@ -1,21 +1,14 @@
-/*
- * headline.css — Parágrafo de resumo profissional
- *
- * Faixa entre o topbar e o layout de duas colunas, com o texto
- * descritivo em negrito justificado.
- */
-
 .headline {
-  padding: 20px 18px 20px 18px;
+  padding: 20px 18px;
   border-bottom: 1px solid var(--color-border-headline);
-  margin-left:10px;
-  margin-right:10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .headline p {
   margin: 0;
-  font-size: 11pt;
+  font-size: 8pt;
   line-height: 1.4;
-  font-weight: 700;
+  font-weight: 600;
   text-align: justify;
 }

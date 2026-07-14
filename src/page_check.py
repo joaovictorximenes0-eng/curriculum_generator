@@ -57,6 +57,8 @@ MAX_STRETCH_FACTOR = 1.7
 # - fator mínimo de "comprimir" espaçamento quando falta espaço
 MIN_SHRINK_FACTOR = 0.72
 
+LIMIT_TO_ONE_PAGE = False
+
 
 def _estimate_lines(text: str, chars_per_line: int) -> int:
     length = len(text or "")
@@ -166,6 +168,13 @@ def compute_density(body_sections, extra_education, competency_blocks):
     Devolve um dict com {"experience": float, "side": float} prontos para
     virar CSS custom properties (--density-experience / --density-side).
     """
+
+    if not LIMIT_TO_ONE_PAGE:
+        return {
+        "experience": 1.0,
+        "side": 1.0,
+    }
+    
     experience_entries = []
     education_entries = []
 

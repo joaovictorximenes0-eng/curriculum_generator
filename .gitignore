@@ -10,3 +10,5 @@ bia/
 input/*.yaml
 !input/sample/
 !input/sample/*.yaml
+static/css/old
+static/css/new
