@@ -1,7 +1,7 @@
 """
 Ponto de entrada: lê os YAMLs modulares de input/, lê os requisitos da vaga em vaga.txt,
 aplica o motor de pontuação inteligente por Tiers/Keywords, monta o
-contexto e renderiza o template HTML final.
+contexto e renderiza o template HTML final. Suporta tradução para o inglês via --eng.
 """
 import sys
 import re
@@ -85,6 +85,11 @@ def next_available_output_paths(base_name: str):
 
 
 def main():
+    # Detecta se a flag --eng foi passada no terminal
+    to_eng = "--eng" in sys.argv
+    if to_eng:
+        print("[render] Modo de tradução para INGLÊS ativo (--eng)")
+
     master_raw = load_modular_resume(INPUT_DIR)
     secrets = load_yaml(SECRETS)
     master = resolve_placeholders(master_raw, secrets)
@@ -97,7 +102,9 @@ def main():
         print("[render] Aviso: vaga.txt não encontrado. Gerando versão genérica por Tiers de peso.")
 
     filtered = apply_selection(master, vaga_text)
-    context = prepare_context(filtered)
+    
+    # Repassamos o estado de tradução para a montagem de contexto
+    context = prepare_context(filtered, to_eng=to_eng)
 
     estimated_mm, usable_mm, overflow = check_overflow(
         context["body_sections"], context.get("extra_education")
@@ -132,7 +139,9 @@ def main():
     default_title = master.get("headline_title", "Desenvolvedor")
     foco_vaga = detect_file_focus(vaga_text, default_title)
 
-    base_name = f"{slugify(primeiros_nomes)}_{slugify(foco_vaga)}"
+    # Adiciona sufixo '_eng' ao arquivo gerado caso a tradução esteja ativa
+    sufixo_idioma = "_eng" if to_eng else ""
+    base_name = f"{slugify(primeiros_nomes)}_{slugify(foco_vaga)}{sufixo_idioma}"
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
