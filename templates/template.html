@@ -40,7 +40,7 @@
             >
               <span class="contact-text contact-text--value">{{ c.text }}</span>
               {% if c.cta %}
-              <span class="contact-cta contact-link__cta">{{ c.cta }}</span>
+              <span class="contact-cta contact-link__cta" aria-hidden="true">{{ c.cta }}</span>
               {% endif %}
             </a>
             {% else %}
@@ -156,17 +156,17 @@
                     >{{ entry.title }}</span
                   >
                   {% if entry.company %}
-                  <span class="entry-company education-entry__company">
-                    — {{ entry.company }}
-                  </span>
+                  <span class="entry-company education-entry__company"
+                    >at {{ entry.company }}</span
+                  >
                   {% endif %}
                 </div>
 
                 {% if entry.start or entry.end %}
                 <span class="entry-date education-entry__date">
-                  {% if entry.start %}{{ entry.start }}{% endif %}{% if
-                  entry.end and entry.end != entry.start %} — {{ entry.end }}{%
-                  endif %}
+                  {% if entry.start %} {{ entry.start }}{% if entry.end and
+                  entry.end != entry.start %} — {{ entry.end }}{% endif %} {%
+                  else %} {{ entry.end }} {% endif %}
                 </span>
                 {% endif %}
               </header>
