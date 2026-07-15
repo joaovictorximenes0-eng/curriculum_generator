@@ -42,6 +42,13 @@
   display: none; 
 }
 
+.topbar__identity {
+  display: flex;
+  align-items: center; /* Alinha todos verticalmente ao centro */
+  width: 100%; /* Garante que ocupe toda a largura disponível da coluna da esquerda */
+  gap: 12px; /* Espaço mínimo de segurança entre os elementos */
+}
+
 .contact-line {
   display: flex;
   align-items: center;
@@ -66,4 +73,25 @@
   cursor: pointer;
   color: var(--color-muted);
   line-height: 1.2;
+}
+
+/* Garante que o H1 se comporte como um contêiner flexível alinhado */
+.topbar__name {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Caso o nome ou cargo sejam gigantes, quebra de linha elegantemente */
+  gap: 8px; /* Espaço entre o Nome, a Barra | e o Cargo */
+}
+
+/* Estilo do separador "|" */
+.topbar__separator {
+  color: var(--color-border); /* Uma cor cinza ou suave para não competir com o texto */
+  font-weight: 300;
+}
+
+/* Ajuste do cargo para que ele não herde o tamanho gigante do nome */
+.topbar__headline {
+  font-size: 14px; /* Ajuste o tamanho conforme preferir */
+  font-weight: 500;
+  color: var(--color-accent);
 }
