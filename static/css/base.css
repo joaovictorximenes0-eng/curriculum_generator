@@ -1,111 +1,76 @@
 :root {
-  /* ==========================================
-   * VARIÁVEIS DE CONTROLE DE ESPAÇO (Otimização)
-   * ========================================== */
+  /* Espaçamento */
+  --page-padding:       28px;
+  --spacing-main:       14px;
+  --spacing-internal:   12px;
+  --spacing-section:     8px;
 
-  /* Distância das margens internas do papel A4 (topo, lados e fundo) */
-  --page-padding: 32px; /* Experimente 32px ou 24px se precisar de espaço */
+  /* Tipografia */
+  --font-display:       'Poppins', Helvetica, sans-serif;
+  --font-body:          Helvetica, Arial, sans-serif;
+  --font-size-name:      24px;
+  --font-size-role:      13px;
+  --font-size-contact:  11px;
+  --font-size-h2:       13px;
+  --font-size-h3:       12px;
+  --font-size-body:     11px;
 
-  /* Espaço vertical idêntico entre os blocos principais (Topbar, Resumo, etc) */
-  --spacing-main: 16px; /* Experimente 12px ou 10px para espremer mais */
-
-  /* Espaço vertical dentro das colunas (entre experiências, habilidades, etc) */
-  --spacing-internal: 16px; /* Reduza para 12px ou 8px se faltar espaço */
-}
-
-h1,
-h2 {
-  padding: 0;
-  font-size: 15px;
-  text-transform: uppercase;
-}
-h3,
-p {
-  margin: 0;
+  /* Cores */
+  --color-bg-main:      #f0f0f0;
+  --color-bg-page:      #ffffff;
+  --color-ink:          #111111;
+  --color-accent:       #0055ff;
+  --color-muted:        #666666;
+  --color-border:       #e0e0e0;
 }
 
 *,
 *::before,
-*::after {
-  box-sizing: border-box;
+*::after { 
+  box-sizing: border-box; 
 }
 
-/* 1. Global: Comportamento para a TELA (Navegador) */
-html,
-body {
+h1, h2, h3, p, ul { 
+  margin: 0; 
+  padding: 0; 
+}
+
+html, body {
   margin: 0;
   padding: 0;
   background: var(--color-bg-main);
-  /* Estilos de fonte removidos para você controlar em outro arquivo */
+  font-family: var(--font-body);
+  font-size: var(--font-size-body);
+  color: var(--color-ink);
 }
 
 body {
-  padding: 24px 18px; /* Respiro apenas para visualização no navegador */
+  padding: 24px 18px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
 }
 
-/* 2. A Estrutura do Documento (Suporta múltiplas páginas) */
 .page {
   width: 210mm;
-  /* Altura mínima de uma página A4, mas cresce infinitamente caso haja mais conteúdo */
   min-height: 297mm;
   margin: 0 auto;
-  background: var(--color-bg-page);
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  /* Espaçador idêntico vertical entre os blocos principais */
-  gap: var(--spacing-main);
-
-  /* Margem de segurança da folha controlada pela variável */
   padding: var(--page-padding);
-
-  /* PERMITE QUE O CONTEÚDO FLUA (Removido overflow: hidden) */
+  background: var(--color-bg-page);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-main);
   overflow: visible;
-
-  /* Sombra leve para simular papel apenas na tela */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Espaçamento interno das colunas do conteúdo principal */
-.layout__main {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-internal);
-}
-
-.layout__aside {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-internal);
-}
-
-/* 3. Evitar quebras feias no meio de blocos de texto importantes */
-.entry,
-.entry__header,
-.education-entry,
-.competency-block,
-.topbar {
-  page-break-inside: avoid;
-  break-inside: avoid;
-}
-
-/* Garante que seções grandes evitem quebras bruscas quando possível */
-.section {
-  page-break-inside: auto;
-  break-inside: auto;
-}
-
-/* 4. Configurações exclusivas para a IMPRESSÃO (Geração do PDF de múltiplas páginas) */
+/* ==========================================================================
+   CONFIGURAÇÕES EXCLUSIVAS DE IMPRESSÃO / PDF
+   ========================================================================== */
 @media print {
-  html,
-  body {
+  html, body {
     width: 210mm;
-    /* Altura automática para o motor do PDF gerar páginas adicionais conforme necessário */
     height: auto;
     overflow: visible;
     padding: 0;
@@ -113,8 +78,8 @@ body {
     background: #ffffff;
   }
 
-  body {
-    padding: 0;
+  body { 
+    padding: 0; 
   }
 
   .page {
@@ -124,11 +89,29 @@ body {
     width: 210mm;
     min-height: 297mm;
     height: auto;
-    /* padding, display e gap são herdados naturalmente da definição de .page acima */
   }
 
   @page {
     size: A4;
-    margin: 0; /* Margens físicas zeradas pois controlamos via padding na .page */
+    margin: 0;
   }
+
+  .contact-action--copy { 
+    display: none; 
+  }
+}
+
+/* Evitar cortes feios no meio de blocos */
+.entry,
+.entry__header,
+.education-entry,
+.competency-block,
+.topbar {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.resume-section {
+  page-break-inside: auto;
+  break-inside: auto;
 }

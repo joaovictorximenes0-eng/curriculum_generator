@@ -1,80 +1,49 @@
-/* ==========================================================================
-   CONFIGURAÇÕES LOCAIS DA TOPBAR (Variáveis de Design)
-   ========================================================================== */
-:root {
-  --topbar-font-display: 'Poppins', Helvetica, sans-serif;
-  --topbar-color-name: var(--color-ink, #111111);
-  --topbar-color-role: var(--color-accent, #0055ff);
-  --topbar-color-border: var(--color-border, #e0e0e0);
-  --topbar-color-muted: var(--color-muted, #666666);
-}
-
-/* ==========================================================================
-   RESET & ESTRUTURA GLOBAL DA TOPBAR
-   ========================================================================== */
-.topbar h1, 
-.topbar p, 
-.topbar div {
-  margin: 0;
-  padding: 0;
-}
-
 .topbar {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* Espaço mínimo e perfeito entre a linha do nome/cargo e a de contatos */
-  padding: 0 0 8px 0; 
-  border-bottom: 1.5px solid var(--topbar-color-border);
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid var(--color-border);
 }
 
-/* ==========================================================================
-   BLOCO DE IDENTIDADE (Nome Completo | Cargo)
-   ========================================================================== */
 .topbar__identity {
   display: flex;
   align-items: center;
-  width: 100%;
   gap: 16px;
 }
 
 .topbar__name {
-  font-family: var(--topbar-font-display);
-  font-size: 24px;
+  font-family: var(--font-display);
+  font-size: var(--font-size-name);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.1;
-  color: var(--topbar-color-name);
-  white-space: nowrap; /* Impede quebras feias no nome */
+  white-space: nowrap;
 }
 
 .topbar__separator {
-  color: var(--topbar-color-border);
+  color: var(--color-border);
   font-weight: 300;
   font-size: 16px;
-  user-select: none; /* Impede que o ATS tente "ler" a barra vertical isolada */
+  user-select: none;
 }
 
 .topbar__headline {
-  font-family: var(--topbar-font-display);
-  font-size: 13px;
+  font-family: var(--font-display);
+  font-size: var(--font-size-role);
   font-weight: 500;
-  color: var(--topbar-color-role);
+  color: var(--color-accent);
   line-height: 1.1;
-  white-space: nowrap; /* Mantém o cargo elegante em linha única */
+  white-space: nowrap;
 }
 
-/* ==========================================================================
-   BLOCO DE CONTATO (E-mail, LinkedIn, GitHub, Telefone)
-   ========================================================================== */
 .topbar__contact {
   display: flex;
-  flex-wrap: wrap; /* Caso a tela encolha, eles descem sem quebrar o layout */
-  justify-content: flex-start; /* Alinhados à esquerda abaixo do nome */
-  gap: 4px 16px; /* Espaço sutil entre as informações de contato */
+  flex-wrap: wrap;
+  gap: 4px 16px;
 }
 
-/* Esconde labels redundantes (ex: "Contact:") que gastam espaço e o ATS não precisa */
-.topbar-label.topbar__contact-label {
+.topbar-label { 
   display: none; 
 }
 
@@ -82,54 +51,31 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
-  color: var(--topbar-color-name);
+  font-size: var(--font-size-contact);
   line-height: 1.1;
 }
 
-.contact-link { 
-  color: var(--topbar-color-name); 
+.contact-link {
+  color: var(--color-ink);
   text-decoration: none;
-  transition: color 0.15s ease;
 }
 
 .contact-link:hover { 
-  color: var(--topbar-color-role); 
+  color: var(--color-accent); 
 }
 
-/* Indicador de "Copy" ou links auxiliares */
-.contact-link__cta { 
-  font-size: 9px; 
-  margin-left: 2px; 
-  opacity: 0.8;
-}
-
-/* Botão de copiar (Apenas para tela, ocultado na impressão do PDF) */
 .contact-action--copy {
   background: none;
-  border: 1px solid var(--topbar-color-border);
+  border: 1px solid var(--color-border);
   border-radius: 2px;
   padding: 0 4px;
   font-size: 9px;
   cursor: pointer;
-  color: var(--topbar-color-muted);
+  color: var(--color-muted);
   line-height: 1.2;
-  transition: all 0.15s ease;
 }
 
-.contact-action--copy:hover { 
-  color: var(--topbar-color-role); 
-  border-color: var(--topbar-color-role); 
-}
-
-.contact-action__feedback { 
-  font-size: 9px; 
-  color: var(--topbar-color-muted); 
-}
-
-/* Oculta o botão de copiar no PDF final para ficar limpo e profissional */
-@media print {
-  .contact-action--copy {
-    display: none;
-  }
+.contact-action--copy:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }

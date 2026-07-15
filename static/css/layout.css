@@ -1,12 +1,20 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-main); /* Força seções principais a ficarem uma abaixo da outra */
+}
+
 .layout__main {
   display: flex;
   flex-direction: column;
-  gap: 16px; 
+  gap: var(--spacing-internal);
+  min-width: 0;
 }
 
 .layout__aside {
   display: flex;
   flex-direction: column;
-  gap: 16px; 
+  gap: var(--spacing-internal);
+  min-width: 0;
+  /* Sem bordas laterais ou paddings horizontais, integrando-se ao fluxo de coluna única */
 }
-
