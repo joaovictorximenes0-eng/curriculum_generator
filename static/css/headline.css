@@ -1,12 +1,18 @@
-.headline {
+/* ==========================================================================
+CONTROLE AQUI O TEXTO DO SUMÁRIO
+/* Esta classe formata o parágrafo do seu resumo */
+.headline__paragraph {
   margin: 0;
-  padding-bottom: 4px;
-  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-body), sans-serif;
+  font-size: 11pt;       /* Tamanho ideal para leitura */
+  font-weight: 300;      /* Peso mais leve e elegante, idêntico ao seu original */
+  line-height: 1.45;     /* Espaçamento perfeito para o bloco de texto não embolar */
+  color: var(--color-ink);
+  text-align: justify;   /* Alinhamento justificado e limpo */
 }
 
-.headline p {
-  font-size: 11pt;
-  font-weight: 300;
-  line-height: 1.4;
-  text-align: justify;
+/* Caso você queira destacar termos em negrito no meio do resumo usando <strong> */
+.headline__paragraph strong {
+  font-weight: 600;
+  color: var(--color-ink);
 }

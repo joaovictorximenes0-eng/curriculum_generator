@@ -9,7 +9,7 @@
 .topbar__identity {
   display: flex;
   align-items: center;
-  gap: 16px;
+    gap: 16px;
 }
 
 .topbar__name {
@@ -40,7 +40,9 @@
 .topbar__contact {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 16px;
+  gap: 15px 16px;
+  padding-top:20px;
+  padding-bottom:10px;
 }
 
 .topbar-label { 
