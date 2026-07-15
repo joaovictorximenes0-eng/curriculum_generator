@@ -13,3 +13,4 @@ input/*.yaml
 
 static/css/new
 static/css/old
+secrets.yaml

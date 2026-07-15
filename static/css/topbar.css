@@ -1,4 +1,17 @@
-/* Reset básico para garantir que nenhum navegador empurre o layout */
+/* ==========================================================================
+   CONFIGURAÇÕES LOCAIS DA TOPBAR (Variáveis de Design)
+   ========================================================================== */
+:root {
+  --topbar-font-display: 'Poppins', Helvetica, sans-serif;
+  --topbar-color-name: var(--color-ink, #111111);
+  --topbar-color-role: var(--color-accent, #0055ff);
+  --topbar-color-border: var(--color-border, #e0e0e0);
+  --topbar-color-muted: var(--color-muted, #666666);
+}
+
+/* ==========================================================================
+   RESET & ESTRUTURA GLOBAL DA TOPBAR
+   ========================================================================== */
 .topbar h1, 
 .topbar p, 
 .topbar div {
@@ -7,91 +20,116 @@
 }
 
 .topbar {
-  /* Zera o padding vertical. Mantivemos apenas um sopro nas laterais se achar necessário, ou use 0 em tudo */
-  padding: 0px 0px 4px; 
-  border-bottom: 1.5px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Espaço mínimo e perfeito entre a linha do nome/cargo e a de contatos */
+  padding: 0 0 8px 0; 
+  border-bottom: 1.5px solid var(--topbar-color-border);
+}
+
+/* ==========================================================================
+   BLOCO DE IDENTIDADE (Nome Completo | Cargo)
+   ========================================================================== */
+.topbar__identity {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
 }
 
 .topbar__name {
-  font-family: var(--font-display);
-  font-size: 24px; /* Reduzido levemente de 28px para economizar linha */
+  font-family: var(--topbar-font-display);
+  font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.1; /* Linha mais colada ao texto */
-  color: var(--color-ink);
+  line-height: 1.1;
+  color: var(--topbar-color-name);
+  white-space: nowrap; /* Impede quebras feias no nome */
+}
+
+.topbar__separator {
+  color: var(--topbar-color-border);
+  font-weight: 300;
+  font-size: 16px;
+  user-select: none; /* Impede que o ATS tente "ler" a barra vertical isolada */
 }
 
 .topbar__headline {
-  font-family: var(--font-display);
-  font-size: 12px; /* Reduzido de 13px */
+  font-family: var(--topbar-font-display);
+  font-size: 13px;
   font-weight: 500;
-  color: var(--color-accent);
-  margin-top: 1px; /* Espaço mínimo apenas para não encavalar */
+  color: var(--topbar-color-role);
   line-height: 1.1;
+  white-space: nowrap; /* Mantém o cargo elegante em linha única */
 }
 
+/* ==========================================================================
+   BLOCO DE CONTATO (E-mail, LinkedIn, GitHub, Telefone)
+   ========================================================================== */
 .topbar__contact {
-  margin-top: 4px; /* Reduzido drasticamente de 16px para 4px */
   display: flex;
-  flex-wrap: wrap;
-  gap: 2px 12px; /* Reduzido o espaçamento vertical e horizontal entre os itens */
+  flex-wrap: wrap; /* Caso a tela encolha, eles descem sem quebrar o layout */
+  justify-content: flex-start; /* Alinhados à esquerda abaixo do nome */
+  gap: 4px 16px; /* Espaço sutil entre as informações de contato */
 }
 
-/* Esconde o label "Contact" que consome uma linha inteira sem necessidade para o ATS */
+/* Esconde labels redundantes (ex: "Contact:") que gastam espaço e o ATS não precisa */
 .topbar-label.topbar__contact-label {
   display: none; 
-}
-
-.topbar__identity {
-  display: flex;
-  align-items: center; /* Alinha todos verticalmente ao centro */
-  width: 100%; /* Garante que ocupe toda a largura disponível da coluna da esquerda */
-  gap: 12px; /* Espaço mínimo de segurança entre os elementos */
 }
 
 .contact-line {
   display: flex;
   align-items: center;
-  gap: 2px;
-  font-size: 11px; /* Reduzido de 12px */
-  color: var(--color-ink);
+  gap: 4px;
+  font-size: 11px;
+  color: var(--topbar-color-name);
   line-height: 1.1;
 }
 
 .contact-link { 
-  color: var(--color-ink); 
+  color: var(--topbar-color-name); 
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
-/* Botão de copiar ultra-compacto */
+.contact-link:hover { 
+  color: var(--topbar-color-role); 
+}
+
+/* Indicador de "Copy" ou links auxiliares */
+.contact-link__cta { 
+  font-size: 9px; 
+  margin-left: 2px; 
+  opacity: 0.8;
+}
+
+/* Botão de copiar (Apenas para tela, ocultado na impressão do PDF) */
 .contact-action--copy {
   background: none;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--topbar-color-border);
   border-radius: 2px;
   padding: 0 4px;
   font-size: 9px;
   cursor: pointer;
-  color: var(--color-muted);
+  color: var(--topbar-color-muted);
   line-height: 1.2;
+  transition: all 0.15s ease;
 }
 
-/* Garante que o H1 se comporte como um contêiner flexível alinhado */
-.topbar__name {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap; /* Caso o nome ou cargo sejam gigantes, quebra de linha elegantemente */
-  gap: 8px; /* Espaço entre o Nome, a Barra | e o Cargo */
+.contact-action--copy:hover { 
+  color: var(--topbar-color-role); 
+  border-color: var(--topbar-color-role); 
 }
 
-/* Estilo do separador "|" */
-.topbar__separator {
-  color: var(--color-border); /* Uma cor cinza ou suave para não competir com o texto */
-  font-weight: 300;
+.contact-action__feedback { 
+  font-size: 9px; 
+  color: var(--topbar-color-muted); 
 }
 
-/* Ajuste do cargo para que ele não herde o tamanho gigante do nome */
-.topbar__headline {
-  font-size: 14px; /* Ajuste o tamanho conforme preferir */
-  font-weight: 500;
-  color: var(--color-accent);
+/* Oculta o botão de copiar no PDF final para ficar limpo e profissional */
+@media print {
+  .contact-action--copy {
+    display: none;
+  }
 }

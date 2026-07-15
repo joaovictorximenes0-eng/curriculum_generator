@@ -24,3 +24,17 @@
 @import url('css/education.css');
 @import url('css/competency.css');
 @import url('css/print.css');
+@import url('css/resume.css');
+
+.resume-section__title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.resume-section__title::after {
+  content: "" !important;
+  flex: 1 !important;
+  height: 1px !important;
+  background: black !important;
+}

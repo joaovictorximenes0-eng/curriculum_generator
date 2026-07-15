@@ -1,0 +1,26 @@
+.resume-section {
+  margin-bottom: 16px;
+}
+
+.resume-section__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 0 0 8px 0;
+
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.resume-section__title::after {
+  content: "";
+  flex: 1;
+
+  height: 1px;
+  background-color: currentColor;
+
+  opacity: 0.35;
+}
